@@ -1,0 +1,122 @@
+{
+  "project": "Dakar Respire",
+  "author": "Ibrahima Anne (Responsable Modélisation & Interface)",
+  "competition": "Concours Mathématiques et Modélisation",
+  "trained_at": "2026-11-23T23:00:00Z",
+  "synthetic": true,
+  "target_col": "pm25",
+  "horizon_hours": 24,
+  "feature_names": [
+    "sin_hour",
+    "cos_hour",
+    "sin_month",
+    "cos_month",
+    "is_dry_season",
+    "wind_u",
+    "wind_v",
+    "is_harmattan",
+    "harmattan_intensity",
+    "rain_accum_6h",
+    "rain_accum_24h",
+    "is_raining",
+    "pm25_lag_1h",
+    "pm25_lag_2h",
+    "pm25_lag_3h",
+    "pm25_lag_6h",
+    "pm25_lag_12h",
+    "pm25_lag_24h",
+    "pm25_lag_48h",
+    "pm25_roll_mean_6h",
+    "pm25_roll_std_6h",
+    "pm25_roll_max_6h",
+    "pm25_roll_min_6h",
+    "pm25_roll_mean_12h",
+    "pm25_roll_std_12h",
+    "pm25_roll_max_12h",
+    "pm25_roll_min_12h",
+    "pm25_roll_mean_24h",
+    "pm25_roll_std_24h",
+    "pm25_roll_max_24h",
+    "pm25_roll_min_24h",
+    "pm25_ratio_6_24",
+    "aod_lag_1h",
+    "aod_roll_mean_24h",
+    "dust_aod_lag_1h",
+    "dust_aod_roll_mean_24h",
+    "no2_lag_1h",
+    "no2_roll_mean_24h",
+    "co_lag_1h",
+    "co_roll_mean_24h"
+  ],
+  "n_train_samples": 7436,
+  "n_test_samples": 1859,
+  "start_date": "2025-11-01 00:00:00+00:00",
+  "end_date": "2026-11-23 23:00:00+00:00",
+  "thresholds": {
+    "BON": {
+      "min": 0,
+      "max": 15,
+      "color": "#10B981",
+      "label": "Bon",
+      "recommandation": "Qualité de l'air satisfaisante. Activités extérieures libres pour tous."
+    },
+    "MOYEN": {
+      "min": 15,
+      "max": 35,
+      "color": "#FBBF24",
+      "label": "Moyen",
+      "recommandation": "Personnes sensibles (asthmatiques, enfants) : limiter les efforts physiques prolongés."
+    },
+    "MAUVAIS": {
+      "min": 35,
+      "max": 55,
+      "color": "#F97316",
+      "label": "Mauvais",
+      "recommandation": "Réduire les sorties sportives. Port de masque recommandé pour les personnes sensibles."
+    },
+    "TRES_MAUVAIS": {
+      "min": 55,
+      "max": 1000,
+      "color": "#EF4444",
+      "label": "Très Mauvais (Alerte)",
+      "recommandation": "Alerte sanitaire : fermer les fenêtres, éviter toute exposition prolongée, port du masque pour tous."
+    }
+  },
+  "team_status": {
+    "Alioune Badara Sarr": {
+      "role": "Étude PM2.5 & Harmattan",
+      "status": "Reçu",
+      "deliverable": "Rapport sources (49% trafic, 16-25% poussières) et caractéristiques de l'Harmattan."
+    },
+    "El Hadji Ibrahima Diop Sow": {
+      "role": "Données météo NASA POWER",
+      "status": "Reçu en partie",
+      "deliverable": "Catalogue reçu. Série temporelle météo 2026 en attente."
+    },
+    "Lamine Cissé": {
+      "role": "Satellites CAMS & Sentinel-5P",
+      "status": "Sources reçues",
+      "deliverable": "Plateformes identifiées (ADS, CDSE). Fichiers NetCDF/CSV en attente."
+    },
+    "Mously Sow": {
+      "role": "Mesures réelles OpenAQ",
+      "status": "Rapport reçu",
+      "deliverable": "Fiches des stations Limamoulaye & Tiaroye. Séries brutes complètes en attente."
+    },
+    "Papa Ibrahima Samb": {
+      "role": "Regroupement & Nettoyage",
+      "status": "À venir",
+      "deliverable": "Fournira le fichier CSV propre final (intégration automatique dans le site)."
+    },
+    "Sayon Sidibé": {
+      "role": "Recherche scientifique & Seuils",
+      "status": "À venir",
+      "deliverable": "Seuils d'alerte et limites d'aérosols (intégration directe dans config)."
+    },
+    "Ibrahima Anne": {
+      "role": "Modèle ML & Site Web Next.js",
+      "status": "Opérationnel",
+      "deliverable": "Site Next.js avec 3D Three.js, pipeline d'apprentissage et moteur d'inférence web."
+    }
+  }
+}
