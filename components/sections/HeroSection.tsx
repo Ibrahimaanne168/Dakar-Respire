@@ -174,8 +174,8 @@ export default function HeroSection({
           />
         </div>
 
-        {/* Volet droit : Scène 3D calme et responsive */}
-        <div className="lg:col-span-7 h-[300px] lg:h-auto min-h-[320px] bg-sand-surface relative">
+        {/* Volet droit : Carte interactive Sénégal & Zoom Dakar (Style Earthly) */}
+        <div className="lg:col-span-7 h-[420px] lg:h-auto min-h-[420px] bg-sand-surface relative">
           <DakarScene3D
             pm25={currentItem.pm25}
             hour={selectedHour}
@@ -183,9 +183,6 @@ export default function HeroSection({
             windDeg={currentItem.wind_deg}
             isHarmattan={isHarmattan}
           />
-          <div className="absolute bottom-3 right-3 text-[10px] text-ink-subtle bg-white/80 backdrop-blur px-2 py-0.5 rounded-md border border-sand-line/60">
-            Vue 3D simulée de la presqu'île · {isHarmattan ? "Harmattan actif" : "Alizé océanique"}
-          </div>
         </div>
       </div>
 

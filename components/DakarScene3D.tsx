@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useRef, useMemo, useEffect, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import * as THREE from "three";
+import React, { useState, useRef, useEffect, useMemo } from "react";
+import Image from "next/image";
 import { getAlertLevel } from "@/lib/config";
+import { ZoomIn, ZoomOut, Wind, MapPin, Compass, Layers, Info } from "lucide-react";
 
 interface DakarSceneProps {
   pm25: number;
@@ -14,428 +13,6 @@ interface DakarSceneProps {
   isHarmattan?: boolean;
 }
 
-// ==============================================================================
-// 1. Contour géographique authentique et précis de la presqu'île du Cap-Vert
-// Coordonnées calibrées : Almadies (Ouest), Yoff (Nord), Plateau/Cap Manuel (Sud),
-// Baie de Hann (Est intérieur), Rufisque (Est continental).
-// ==============================================================================
-function createCapVertShape(): THREE.Shape {
-  const shape = new THREE.Shape();
-
-  // Départ : côte continentale Nord-Est (vers Rufisque / Bargny)
-  shape.moveTo(4.5, 0.4);
-
-  // Côte Nord (Malika, Cambérène, Guédiawaye)
-  shape.bezierCurveTo(3.2, 0.7, 2.0, 1.1, 0.8, 1.4);
-  shape.bezierCurveTo(0.2, 1.5, -0.6, 1.8, -1.2, 1.7); // Yoff Plage
-
-  // Pointe de Ngor & Almadies (Pointe la plus occidentale d'Afrique)
-  shape.bezierCurveTo(-1.8, 1.8, -2.6, 1.6, -3.2, 1.3);
-  shape.lineTo(-3.6, 0.9); // Pointe des Almadies
-  shape.bezierCurveTo(-3.8, 0.6, -3.7, 0.2, -3.4, -0.1); // Virage Sud Almadies
-
-  // Côte Ouest (Mamelles, Ouakam, Fann)
-  shape.bezierCurveTo(-3.1, -0.4, -2.8, -0.8, -2.6, -1.2);
-  shape.bezierCurveTo(-2.4, -1.5, -2.3, -1.9, -2.1, -2.4); // Pointe de Fann
-
-  // Sud : Cap Manuel et Dakar Plateau
-  shape.bezierCurveTo(-2.0, -2.8, -1.8, -3.2, -1.5, -3.3); // Cap Manuel
-  shape.bezierCurveTo(-1.2, -3.3, -1.0, -3.0, -0.9, -2.6); // Pointe Sud Plateau
-  shape.bezierCurveTo(-0.8, -2.2, -0.7, -1.8, -0.6, -1.4); // Port de Dakar
-
-  // Baie de Hann (courbure intérieure protégée)
-  shape.bezierCurveTo(-0.4, -0.9, 0.1, -0.5, 0.8, -0.4);
-  shape.bezierCurveTo(1.6, -0.3, 2.5, -0.2, 3.4, -0.1);
-  shape.bezierCurveTo(3.8, -0.1, 4.2, -0.1, 4.5, -0.2); // Rufisque Sud
-
-  // Fermeture continentale Est
-  shape.lineTo(4.5, 0.4);
-
-  return shape;
-}
-
-// ==============================================================================
-// 2. Modèle 3D de la presqu'île du Cap-Vert avec relief, récifs et phare
-// ==============================================================================
-function CapVertTerrain({ pm25, hour = 14 }: { pm25: number; hour?: number }) {
-  const shape = useMemo(() => createCapVertShape(), []);
-  const isNight = hour >= 20 || hour < 6;
-
-  // Extrusion douce pour le relief côtier
-  const extrudeSettings = useMemo(
-    () => ({
-      steps: 1,
-      depth: 0.18,
-      bevelEnabled: true,
-      bevelThickness: 0.04,
-      bevelSize: 0.04,
-      bevelSegments: 3,
-    }),
-    []
-  );
-
-  // Contour pour l'estran (eaux côtières peu profondes / turquoise)
-  const reefExtrudeSettings = useMemo(
-    () => ({
-      steps: 1,
-      depth: 0.06,
-      bevelEnabled: true,
-      bevelThickness: 0.12,
-      bevelSize: 0.15,
-      bevelSegments: 2,
-    }),
-    []
-  );
-
-  const beaconRef = useRef<THREE.Group>(null!);
-
-  useFrame((_, delta) => {
-    if (beaconRef.current) {
-      beaconRef.current.rotation.y += delta * 1.2;
-    }
-  });
-
-  return (
-    <group rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-      {/* 1. Estran / Récif côtier turquoise peu profond */}
-      <mesh position={[0, 0, -0.05]}>
-        <extrudeGeometry args={[shape, reefExtrudeSettings]} />
-        <meshStandardMaterial
-          color="#3A8E88"
-          roughness={0.4}
-          metalness={0.1}
-          transparent
-          opacity={0.65}
-        />
-      </mesh>
-
-      {/* 2. Terre ferme du Cap-Vert (sable chaud doré + texture urbaine sobre) */}
-      <mesh receiveShadow castShadow position={[0, 0, 0]}>
-        <extrudeGeometry args={[shape, extrudeSettings]} />
-        <meshStandardMaterial
-          color={isNight ? "#8B7E68" : "#E2D7C2"}
-          roughness={0.88}
-          metalness={0.06}
-        />
-      </mesh>
-
-      {/* 3. Collines des Mamelles (relief volcanique emblématique de Dakar) */}
-      {/* Mamelle Occidentale (avec phare) */}
-      <mesh position={[-2.85, 0.45, 0.22]} castShadow>
-        <coneGeometry args={[0.38, 0.32, 16]} />
-        <meshStandardMaterial color={isNight ? "#6E624E" : "#C4B294"} roughness={0.9} />
-      </mesh>
-
-      {/* Mamelle Orientale */}
-      <mesh position={[-2.55, 0.32, 0.2]} castShadow>
-        <coneGeometry args={[0.34, 0.26, 16]} />
-        <meshStandardMaterial color={isNight ? "#6E624E" : "#C7B79B"} roughness={0.9} />
-      </mesh>
-
-      {/* Phare des Mamelles (tour blanche + coupole + faisceau) */}
-      <group position={[-2.85, 0.45, 0.38]} ref={beaconRef}>
-        {/* Fût du phare */}
-        <mesh position={[0, 0, 0.08]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.035, 0.05, 0.16, 8]} />
-          <meshStandardMaterial color="#FFFFFF" roughness={0.3} />
-        </mesh>
-        {/* Lanterne */}
-        <mesh position={[0, 0, 0.17]}>
-          <sphereGeometry args={[0.03, 8, 8]} />
-          <meshStandardMaterial
-            color="#FFF4D0"
-            emissive="#FFD875"
-            emissiveIntensity={isNight ? 2.5 : 0.6}
-          />
-        </mesh>
-        {/* Faisceau lumineux du phare la nuit */}
-        {isNight && (
-          <mesh position={[0.7, 0, 0.17]} rotation={[0, 0, -Math.PI / 2]}>
-            <coneGeometry args={[0.25, 1.4, 12, 1, true]} />
-            <meshBasicMaterial
-              color="#FFE89E"
-              transparent
-              opacity={0.35}
-              side={THREE.DoubleSide}
-            />
-          </mesh>
-        )}
-      </group>
-
-      {/* 4. Îlot de Ngor (au Nord des Almadies) */}
-      <mesh position={[-2.8, 1.85, 0.08]} castShadow>
-        <cylinderGeometry args={[0.18, 0.22, 0.1, 10]} />
-        <meshStandardMaterial color={isNight ? "#726550" : "#D4C4A8"} roughness={0.9} />
-      </mesh>
-
-      {/* 5. Île de Gorée (au large de Dakar Plateau) */}
-      <group position={[-0.2, -2.6, 0.08]}>
-        <mesh castShadow>
-          <cylinderGeometry args={[0.22, 0.28, 0.12, 12]} />
-          <meshStandardMaterial color={isNight ? "#726550" : "#D9B48F"} roughness={0.9} />
-        </mesh>
-        {/* Fort d'Estrées miniature */}
-        <mesh position={[0, 0, 0.08]}>
-          <boxGeometry args={[0.12, 0.12, 0.06]} />
-          <meshStandardMaterial color="#A85738" roughness={0.8} />
-        </mesh>
-      </group>
-
-      {/* 6. Îles de la Madeleine (au large de Fann) */}
-      <mesh position={[-3.1, -2.3, 0.06]} castShadow>
-        <cylinderGeometry args={[0.16, 0.2, 0.08, 8]} />
-        <meshStandardMaterial color={isNight ? "#655945" : "#BCAE94"} roughness={0.9} />
-      </mesh>
-    </group>
-  );
-}
-
-// ==============================================================================
-// 3. Balises 3D interactives pour les stations au sol
-// Limamoulaye, Tivaoune Diacksao et Ambassade USA
-// ==============================================================================
-function StationPin({
-  position,
-  name,
-  pm25,
-  isReference = false,
-}: {
-  position: [number, number, number];
-  name: string;
-  pm25: number;
-  isReference?: boolean;
-}) {
-  const alert = getAlertLevel(pm25);
-  const ringRef = useRef<THREE.Mesh>(null!);
-
-  useFrame(({ clock }) => {
-    if (ringRef.current) {
-      const scale = 1 + Math.sin(clock.getElapsedTime() * 3) * 0.25;
-      ringRef.current.scale.set(scale, scale, 1);
-    }
-  });
-
-  return (
-    <group position={position}>
-      {/* Tige de la balise */}
-      <mesh position={[0, 0.18, 0]}>
-        <cylinderGeometry args={[0.015, 0.015, 0.36, 8]} />
-        <meshStandardMaterial color="#1B1F23" metalness={0.4} />
-      </mesh>
-
-      {/* Sphère sommitale colorée selon PM2.5 */}
-      <mesh position={[0, 0.38, 0]}>
-        <sphereGeometry args={[0.06, 12, 12]} />
-        <meshStandardMaterial
-          color={alert.color}
-          emissive={alert.color}
-          emissiveIntensity={0.6}
-        />
-      </mesh>
-
-      {/* Anneau pulsant au sol */}
-      <mesh
-        ref={ringRef}
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, 0.02, 0]}
-      >
-        <ringGeometry args={[0.1, 0.16, 16]} />
-        <meshBasicMaterial
-          color={alert.color}
-          transparent
-          opacity={0.5}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-    </group>
-  );
-}
-
-// ==============================================================================
-// 4. Océan Atlantique avec reflets et nuances de profondeur
-// ==============================================================================
-function Ocean() {
-  const meshRef = useRef<THREE.Mesh>(null!);
-
-  useFrame(({ clock }) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.z = Math.sin(clock.getElapsedTime() * 0.1) * 0.02;
-    }
-  });
-
-  return (
-    <mesh
-      ref={meshRef}
-      rotation={[-Math.PI / 2, 0, 0]}
-      position={[0, -0.06, 0]}
-      receiveShadow
-    >
-      <planeGeometry args={[40, 40, 32, 32]} />
-      <meshStandardMaterial
-        color="#1E474D"
-        roughness={0.25}
-        metalness={0.2}
-        envMapIntensity={0.8}
-      />
-    </mesh>
-  );
-}
-
-// ==============================================================================
-// 5. Panache atmosphérique volumétrique & Particules portées par le vent
-// ==============================================================================
-const MAX_PARTICLES = 1200;
-
-function AtmosphericFlow({
-  pm25,
-  windSpeed = 4.2,
-  windDeg = 45,
-}: {
-  pm25: number;
-  windSpeed?: number;
-  windDeg?: number;
-}) {
-  const pointsRef = useRef<THREE.Points>(null!);
-  const activeCount = Math.min(Math.max(Math.round(pm25 * 15), 180), 950);
-
-  // Couleur de la brume selon la teneur en poussière
-  const dustColor = useMemo(() => {
-    if (pm25 <= 15) return new THREE.Color("#4A7C59"); // Air pur
-    if (pm25 <= 35) return new THREE.Color("#D8AC6B"); // Ocre saharien doré
-    if (pm25 <= 55) return new THREE.Color("#C86F3A"); // Harmattan dense
-    return new THREE.Color("#A8402F"); // Brume rouge brique intense
-  }, [pm25]);
-
-  const { positions, speeds } = useMemo(() => {
-    const pos = new Float32Array(MAX_PARTICLES * 3);
-    const spd = new Float32Array(MAX_PARTICLES);
-
-    for (let i = 0; i < MAX_PARTICLES; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 14;
-      pos[i * 3 + 1] = Math.random() * 2.4 + 0.12; // Au-dessus du sol
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 14;
-      spd[i] = 0.5 + Math.random() * 0.8;
-    }
-    return { positions: pos, speeds: spd };
-  }, []);
-
-  useEffect(() => {
-    if (pointsRef.current?.geometry) {
-      pointsRef.current.geometry.setDrawRange(0, activeCount);
-    }
-  }, [activeCount]);
-
-  useFrame(() => {
-    if (!pointsRef.current) return;
-    const posAttr = pointsRef.current.geometry.attributes.position;
-    const arr = posAttr.array as Float32Array;
-
-    // Dérive selon l'angle du vent
-    const rad = ((windDeg - 180) * Math.PI) / 180;
-    const vx = Math.sin(rad) * windSpeed * 0.003;
-    const vz = Math.cos(rad) * windSpeed * 0.003;
-
-    for (let i = 0; i < activeCount; i++) {
-      const factor = speeds[i];
-      arr[i * 3] += vx * factor;
-      arr[i * 3 + 2] += vz * factor;
-
-      // Bouclage
-      if (arr[i * 3] < -7) arr[i * 3] = 7;
-      if (arr[i * 3] > 7) arr[i * 3] = -7;
-      if (arr[i * 3 + 2] < -7) arr[i * 3 + 2] = 7;
-      if (arr[i * 3 + 2] > 7) arr[i * 3 + 2] = -7;
-    }
-    posAttr.needsUpdate = true;
-  });
-
-  return (
-    <group>
-      {/* 1. Nappe volumétrique de brume sèche au-dessus de Dakar */}
-      <mesh position={[0, 0.45, 0]}>
-        <cylinderGeometry args={[5.2, 5.8, 0.6, 24]} />
-        <meshStandardMaterial
-          color={dustColor}
-          transparent
-          opacity={Math.min(0.08 + pm25 / 450, 0.28)}
-          depthWrite={false}
-          roughness={1}
-        />
-      </mesh>
-
-      {/* 2. Essaim de particules de poussière en dérive */}
-      <points ref={pointsRef}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={positions.length / 3}
-            array={positions}
-            itemSize={3}
-          />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.065}
-          color={dustColor}
-          transparent
-          opacity={Math.min(0.3 + pm25 / 160, 0.75)}
-          depthWrite={false}
-        />
-      </points>
-    </group>
-  );
-}
-
-// ==============================================================================
-// 6. Éclairage solaire et dôme céleste selon l'heure
-// ==============================================================================
-function SkyLighting({ hour = 14 }: { hour?: number }) {
-  const isNight = hour >= 20 || hour < 6;
-  const isDuskOrDawn = (hour >= 6 && hour <= 8) || (hour >= 18 && hour < 20);
-
-  let sunColor = "#FFF8EE";
-  let sunIntensity = 1.25;
-  let ambientColor = "#F5EDE0";
-  let ambientIntensity = 0.85;
-
-  if (isNight) {
-    sunColor = "#6A829D";
-    sunIntensity = 0.25;
-    ambientColor = "#1B2A36";
-    ambientIntensity = 0.45;
-  } else if (isDuskOrDawn) {
-    sunColor = "#F4A261";
-    sunIntensity = 1.0;
-    ambientColor = "#E7C5A0";
-    ambientIntensity = 0.75;
-  }
-
-  // Position du soleil sur son arc diurne
-  const sunAngle = ((hour - 6) / 12) * Math.PI;
-  const sunX = Math.cos(sunAngle) * 9;
-  const sunY = Math.max(Math.sin(sunAngle) * 8, 1.5);
-  const sunZ = 5;
-
-  return (
-    <>
-      <ambientLight intensity={ambientIntensity} color={ambientColor} />
-      <directionalLight
-        position={[sunX, sunY, sunZ]}
-        intensity={sunIntensity}
-        color={sunColor}
-        castShadow
-        shadow-mapSize={[1024, 1024]}
-      />
-      {/* Lumière d'appoint océanique */}
-      <hemisphereLight
-        args={[ambientColor, isNight ? "#0D1821" : "#1A4B54", 0.4]}
-      />
-    </>
-  );
-}
-
-// ==============================================================================
-// 7. Scène 3D Principale Exportée
-// ==============================================================================
 export const DakarScene3D: React.FC<DakarSceneProps> = ({
   pm25,
   hour = 14,
@@ -443,107 +20,522 @@ export const DakarScene3D: React.FC<DakarSceneProps> = ({
   windDeg = 45,
   isHarmattan = true,
 }) => {
-  const [mounted, setMounted] = useState(false);
-  const [hasWebGL, setHasWebGL] = useState(true);
+  // Mode de zoom : "senegal" (vue nationale globale) ou "dakar" (zoom presqu'île détaillé)
+  const [zoomLevel, setZoomLevel] = useState<"senegal" | "dakar">("senegal");
+  const [selectedStation, setSelectedStation] = useState<string | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const alert = getAlertLevel(pm25);
+
+  // Stations réelles et points de mesure dans la région de Dakar (pour le zoom Dakar)
+  const dakarStations = useMemo(
+    () => [
+      {
+        id: "almadies",
+        name: "Ambassade USA (BAM-1022)",
+        commune: "Almadies / Ngor",
+        x: 18,
+        y: 52,
+        val: parseFloat((pm25 * 1.04).toFixed(1)),
+        isRef: true,
+      },
+      {
+        id: "mamelles",
+        name: "Phare des Mamelles",
+        commune: "Ouakam",
+        x: 23,
+        y: 54,
+        val: parseFloat((pm25 * 0.98).toFixed(1)),
+      },
+      {
+        id: "limamoulaye",
+        name: "Complexe Limamoulaye",
+        commune: "Grand Dakar (OpenAQ)",
+        x: 32,
+        y: 56,
+        val: parseFloat((pm25 * 1.0).toFixed(1)),
+      },
+      {
+        id: "plateau",
+        name: "Dakar Plateau / Port",
+        commune: "Plateau & Cap Manuel",
+        x: 35,
+        y: 68,
+        val: parseFloat((pm25 * 1.08).toFixed(1)),
+      },
+      {
+        id: "goree",
+        name: "Île de Gorée",
+        commune: "Au large du port",
+        x: 42,
+        y: 66,
+        val: parseFloat((pm25 * 0.88).toFixed(1)),
+      },
+      {
+        id: "guediawaye",
+        name: "Guédiawaye Plage",
+        commune: "Littoral Nord",
+        x: 45,
+        y: 43,
+        val: parseFloat((pm25 * 0.95).toFixed(1)),
+      },
+      {
+        id: "tivaoune",
+        name: "Mairie Tivaoune Diacksao",
+        commune: "Tiaroye / Pikine (OpenAQ)",
+        x: 52,
+        y: 52,
+        val: parseFloat((pm25 * 0.97).toFixed(1)),
+      },
+      {
+        id: "rufisque",
+        name: "Rufisque / Bargny",
+        commune: "Entrée Harmattan",
+        x: 74,
+        y: 62,
+        val: parseFloat((pm25 * 1.15).toFixed(1)),
+      },
+    ],
+    [pm25]
+  );
+
+  // Repères pour la vue nationale Sénégal
+  const senegalRegions = useMemo(
+    () => [
+      {
+        name: "Dakar (Presqu'île du Cap-Vert)",
+        role: "Zone d'étude principale",
+        x: 14.5,
+        y: 45,
+        pm25Val: Math.round(pm25),
+        isTarget: true,
+      },
+      {
+        name: "Saint-Louis (Corridor Nord)",
+        role: "Entrée poussière du Sahara",
+        x: 26,
+        y: 20,
+        pm25Val: Math.round(pm25 * 1.35),
+      },
+      {
+        name: "Matam / Vallée du Fleuve",
+        role: "Brumes sahariennes denses",
+        x: 62,
+        y: 26,
+        pm25Val: Math.round(pm25 * 1.5),
+      },
+      {
+        name: "Thiès",
+        role: "Zone intermédiaire",
+        x: 22,
+        y: 46,
+        pm25Val: Math.round(pm25 * 1.1),
+      },
+      {
+        name: "Ziguinchor (Casamance)",
+        role: "Zone Sud protégée",
+        x: 32,
+        y: 84,
+        pm25Val: Math.round(pm25 * 0.65),
+      },
+    ],
+    [pm25]
+  );
+
+  // Animation des particules d'Harmattan en flux d'ouest/sud-ouest
   useEffect(() => {
-    setMounted(true);
-    try {
-      const canvas = document.createElement("canvas");
-      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-      if (!gl) setHasWebGL(false);
-    } catch {
-      setHasWebGL(false);
-    }
-  }, []);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-  if (!mounted) {
-    return (
-      <div className="w-full h-full min-h-[360px] bg-sand-surface rounded-[16px] flex flex-col items-center justify-center text-xs text-ink-muted">
-        <span>Génération de la presqu'île 3D de Dakar…</span>
-      </div>
-    );
-  }
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-  if (!hasWebGL) {
-    const alert = getAlertLevel(pm25);
-    return (
-      <div className="w-full h-full min-h-[360px] bg-sand-surface p-6 flex flex-col items-center justify-center text-center rounded-[16px] border border-sand-line">
-        <span className="font-serif text-4xl text-ink mb-1">{pm25.toFixed(1).replace(".", ",")}</span>
-        <span className="text-xs text-ink-muted">µg/m³ PM2.5 · {alert.label}</span>
-      </div>
-    );
-  }
+    let animId: number;
+    let width = (canvas.width = canvas.offsetWidth);
+    let height = (canvas.height = canvas.offsetHeight);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = canvas.offsetWidth;
+      height = canvas.height = canvas.offsetHeight;
+    };
+    window.addEventListener("resize", handleResize);
+
+    // Particules de vent fluides
+    const count = zoomLevel === "senegal" ? 75 : 90;
+    const particles = Array.from({ length: count }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      len: 12 + Math.random() * 24,
+      speed: 0.8 + Math.random() * 1.4,
+      opacity: 0.15 + Math.random() * 0.35,
+    }));
+
+    // Vecteur éolien selon windDeg (Harmattan = ~45° venant du NE vers SO)
+    const angleRad = ((windDeg - 180) * Math.PI) / 180;
+    const vx = Math.sin(angleRad) * windSpeed * 0.45;
+    const vy = Math.cos(angleRad) * windSpeed * 0.45;
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle =
+        pm25 <= 15
+          ? "rgba(31, 92, 94, 0.3)"
+          : pm25 <= 35
+          ? "rgba(201, 154, 30, 0.45)"
+          : "rgba(181, 83, 42, 0.55)";
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += vx * p.speed;
+        p.y += vy * p.speed;
+
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x - vx * p.len, p.y - vy * p.len);
+        ctx.stroke();
+      }
+
+      animId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [pm25, windSpeed, windDeg, zoomLevel]);
 
   return (
-    <div className="w-full h-full min-h-[360px] relative rounded-[16px] overflow-hidden bg-gradient-to-b from-[#1C3E44] to-[#122A2E]">
-      <Canvas shadows dpr={[1, 1.5]}>
-        {/* Caméra aérienne isométrique plongeante */}
-        <PerspectiveCamera
-          makeDefault
-          position={[0, 7.8, 8.2]}
-          fov={38}
-        />
-        <OrbitControls
-          enablePan={false}
-          maxPolarAngle={Math.PI / 2.3}
-          minPolarAngle={Math.PI / 5.5}
-          minDistance={6}
-          maxDistance={15}
-          autoRotate={false}
-          target={[0, 0.2, 0]}
-        />
+    <div className="relative w-full h-full min-h-[420px] sm:min-h-[460px] rounded-[18px] overflow-hidden select-none bg-[#F7F9FC] border border-sand-line/70 flex flex-col justify-between">
+      {/* ── 1. Barre supérieure de contrôle (Style Earthly / Capture 2) ── */}
+      <div className="absolute top-3 inset-x-3 z-30 flex items-center justify-between gap-2 pointer-events-none">
+        {/* Toggle Vue Sénégal ↔ Zoom Dakar */}
+        <div className="flex items-center p-1 bg-white/95 backdrop-blur-md rounded-pill shadow-card border border-sand-line pointer-events-auto">
+          <button
+            onClick={() => setZoomLevel("senegal")}
+            className={`px-3 py-1 text-xs rounded-pill transition-all font-medium flex items-center gap-1.5 ${
+              zoomLevel === "senegal"
+                ? "bg-ink text-white shadow-xs"
+                : "text-ink-muted hover:text-ink hover:bg-sand-surface"
+            }`}
+          >
+            <span>🇸🇳 Tout le Sénégal</span>
+          </button>
+          <button
+            onClick={() => setZoomLevel("dakar")}
+            className={`px-3 py-1 text-xs rounded-pill transition-all font-medium flex items-center gap-1.5 ${
+              zoomLevel === "dakar"
+                ? "bg-ink text-white shadow-xs"
+                : "text-ink-muted hover:text-ink hover:bg-sand-surface"
+            }`}
+          >
+            <span>📍 Zoom Dakar (Presqu'île)</span>
+          </button>
+        </div>
 
-        <SkyLighting hour={hour} />
-        <Ocean />
-        <CapVertTerrain pm25={pm25} hour={hour} />
-
-        {/* Balises 3D des stations réelles */}
-        {/* 1. Complexe Limamoulaye (Grand Dakar) */}
-        <StationPin
-          position={[-0.8, 0.2, -0.4]}
-          name="Limamoulaye"
-          pm25={pm25}
-        />
-
-        {/* 2. Mairie Tivaoune Diacksao (Tiaroye / Pikine) */}
-        <StationPin
-          position={[1.5, 0.2, 0.1]}
-          name="Tivaoune Diacksao"
-          pm25={pm25 * 0.95}
-        />
-
-        {/* 3. Ambassade des USA (Almadies) */}
-        <StationPin
-          position={[-3.3, 0.22, 0.6]}
-          name="Ambassade USA"
-          pm25={pm25 * 1.05}
-          isReference={true}
-        />
-
-        {/* Panache de poussière & écoulement éolien */}
-        <AtmosphericFlow pm25={pm25} windSpeed={windSpeed} windDeg={windDeg} />
-      </Canvas>
-
-      {/* Légende discrète superposée */}
-      <div className="absolute bottom-3 left-3 flex flex-wrap items-center gap-2 pointer-events-none text-[11px] text-white/90 bg-ink/65 backdrop-blur-md px-3 py-1.5 rounded-pill border border-white/15">
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-[#E2D7C2]" />
-          <span>Presqu'île du Cap-Vert</span>
-        </span>
-        <span>·</span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-[#FFF4D0] animate-pulse" />
-          <span>Phare des Mamelles</span>
-        </span>
-        <span>·</span>
-        <span className="text-white/70">
-          Vent : {windSpeed} m/s ({isHarmattan ? "Harmattan Nord-Est" : "Alizé"})
-        </span>
+        {/* Boutons Zoom + / - */}
+        <div className="flex items-center gap-1 bg-white/95 backdrop-blur-md p-1 rounded-pill shadow-card border border-sand-line pointer-events-auto">
+          <button
+            onClick={() => setZoomLevel("dakar")}
+            title="Zoomer sur Dakar"
+            className={`p-1.5 rounded-full hover:bg-sand-surface transition-colors ${
+              zoomLevel === "dakar" ? "text-terracotta" : "text-ink-muted"
+            }`}
+          >
+            <ZoomIn className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setZoomLevel("senegal")}
+            title="Dézoomer sur le Sénégal"
+            className={`p-1.5 rounded-full hover:bg-sand-surface transition-colors ${
+              zoomLevel === "senegal" ? "text-terracotta" : "text-ink-muted"
+            }`}
+          >
+            <ZoomOut className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
-      <div className="absolute top-3 right-3 text-[10px] text-white/80 bg-ink/50 backdrop-blur px-2 py-0.5 rounded border border-white/10 pointer-events-none">
-        Cliquez et glissez pour orienter la vue 3D
+      {/* ── 2. Toile Canvas pour le flux de vent animé (Harmattan) ── */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none z-20"
+      />
+
+      {/* ── 3. Conteneur cartographique interactif ── */}
+      <div className="relative flex-1 w-full h-full flex items-center justify-center p-4 pt-12 overflow-hidden">
+        {/* ==================================================================== */}
+        {/* CAS A : VUE 1 - TOUT LE SÉNÉGAL (Vue d'ensemble nationale) */}
+        {/* ==================================================================== */}
+        {zoomLevel === "senegal" && (
+          <div className="relative w-full max-w-xl h-[330px] flex items-center justify-center animate-in fade-in duration-300">
+            {/* Carte vectorielle épurée du Sénégal avec région de Dakar */}
+            <div className="relative w-full h-full flex items-center justify-center">
+              <Image
+                src="/images/senegal-dakar-map.jpg"
+                alt="Carte du Sénégal avec Dakar à la pointe Ouest"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 600px"
+                className="object-contain filter contrast-105 opacity-90 p-2"
+              />
+
+              {/* Grand flux de l'Harmattan (flèche / cône venant du Nord-Est saharien) */}
+              <svg
+                viewBox="0 0 100 100"
+                className="absolute inset-0 w-full h-full pointer-events-none z-10"
+              >
+                <defs>
+                  <linearGradient id="harmattanFlow" x1="1" y1="0" x2="0" y2="0.6">
+                    <stop offset="0%" stopColor="#B5532A" stopOpacity="0.35" />
+                    <stop offset="60%" stopColor="#E9A15B" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#B5532A" stopOpacity="0.1" />
+                  </linearGradient>
+                </defs>
+
+                {/* Panache de poussière saharien descendant du Nord-Est vers Dakar */}
+                <path
+                  d="M90,5 C70,15 45,30 18,44 L16,47 C40,36 68,22 95,12 Z"
+                  fill="url(#harmattanFlow)"
+                />
+
+                {/* Ligne pointillée du vecteur de vent */}
+                <line
+                  x1="82"
+                  y1="12"
+                  x2="20"
+                  y2="44"
+                  stroke="#B5532A"
+                  strokeWidth="0.8"
+                  strokeDasharray="2 2"
+                  opacity="0.7"
+                />
+              </svg>
+
+              {/* Cercles d'intensité circulaires translucides (Exactement comme Capture Earthly) */}
+              {/* 1. Grand cercle saharien Nord-Est (Matam / Saint-Louis) */}
+              <div
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
+                style={{
+                  left: "62%",
+                  top: "26%",
+                  width: "160px",
+                  height: "160px",
+                  background:
+                    "radial-gradient(circle, rgba(168, 55, 44, 0.42) 0%, rgba(201, 154, 30, 0.15) 55%, transparent 75%)",
+                  border: "1px dashed rgba(168, 55, 44, 0.35)",
+                }}
+              >
+                {/* Pastille noire avec valeur (style Earthly) */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-ink text-white text-[11px] font-mono px-2 py-0.5 rounded-full shadow-md">
+                  {Math.round(pm25 * 1.5)} µg
+                </div>
+              </div>
+
+              {/* 2. Cercle d'intensité sur Dakar (Pointe Ouest) */}
+              <div
+                onClick={() => setZoomLevel("dakar")}
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 rounded-full cursor-pointer transition-transform hover:scale-105 z-20 group"
+                style={{
+                  left: "14%",
+                  top: "45%",
+                  width: "110px",
+                  height: "110px",
+                  background: `radial-gradient(circle, ${alert.color}55 0%, ${alert.color}15 60%, transparent 75%)`,
+                  border: `1.5px solid ${alert.color}80`,
+                }}
+              >
+                {/* Pastille noire avec valeur centrale + clic pour zoomer */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-ink text-white text-xs font-serif px-2.5 py-1 rounded-full shadow-lg flex items-center gap-1.5 ring-2 ring-terracotta">
+                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: alert.color }} />
+                  <span>{pm25.toFixed(0)} µg/m³</span>
+                </div>
+
+                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-white/95 text-ink text-[10px] font-medium px-2 py-0.5 rounded shadow-sm border border-sand-line">
+                  🔍 Cliquer pour zoomer sur Dakar
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ==================================================================== */}
+        {/* CAS B : VUE 2 - ZOOM DÉTAILLÉ SUR LA PRESQU'ÎLE DE DAKAR */}
+        {/* ==================================================================== */}
+        {zoomLevel === "dakar" && (
+          <div className="relative w-full max-w-2xl h-[340px] flex items-center justify-center animate-in fade-in duration-300">
+            {/* Relief 3D isométrique blanc officiel fourni par l'utilisateur */}
+            <div className="relative w-full h-full flex items-center justify-center">
+              <Image
+                src="/images/dakar-relief-white.webp"
+                alt="Relief de la presqu'île de Dakar avec départements"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 700px"
+                className="object-contain filter contrast-110 drop-shadow-md"
+              />
+
+              {/* Cercles de chaleur d'aérosols (Style Earthly) sur les départements */}
+              {/* Cercle 1 : Almadies / Mamelles (Ouest) */}
+              <div
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
+                style={{
+                  left: "22%",
+                  top: "52%",
+                  width: "115px",
+                  height: "115px",
+                  background:
+                    pm25 <= 15
+                      ? "radial-gradient(circle, rgba(63, 125, 88, 0.45) 0%, transparent 70%)"
+                      : "radial-gradient(circle, rgba(201, 154, 30, 0.4) 0%, transparent 70%)",
+                }}
+              />
+
+              {/* Cercle 2 : Grand Dakar / Pikine / Guédiawaye (Centre) */}
+              <div
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
+                style={{
+                  left: "44%",
+                  top: "50%",
+                  width: "135px",
+                  height: "135px",
+                  background:
+                    pm25 <= 35
+                      ? "radial-gradient(circle, rgba(201, 154, 30, 0.45) 0%, transparent 70%)"
+                      : "radial-gradient(circle, rgba(210, 105, 30, 0.5) 0%, transparent 70%)",
+                }}
+              />
+
+              {/* Cercle 3 : Rufisque / Bargny (Entrée continentale de poussière) */}
+              <div
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
+                style={{
+                  left: "76%",
+                  top: "58%",
+                  width: "140px",
+                  height: "140px",
+                  background:
+                    pm25 <= 35
+                      ? "radial-gradient(circle, rgba(210, 105, 30, 0.45) 0%, transparent 70%)"
+                      : "radial-gradient(circle, rgba(168, 55, 44, 0.55) 0%, transparent 70%)",
+                }}
+              />
+
+              {/* Balises et stations au sol réelles (Limamoulaye, Tivaoune, USA) */}
+              {dakarStations.map((st) => {
+                const stAlert = getAlertLevel(st.val);
+                const isSelected = selectedStation === st.id;
+
+                return (
+                  <div
+                    key={st.id}
+                    onClick={() => setSelectedStation(st.id)}
+                    className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-30 transition-transform hover:scale-110"
+                    style={{ left: `${st.x}%`, top: `${st.y}%` }}
+                  >
+                    {/* Disque de mesure noir avec chiffre blanc (style Earthly) */}
+                    <div
+                      className={`flex items-center gap-1.5 px-2 py-0.8 rounded-full shadow-card border transition-all ${
+                        isSelected
+                          ? "bg-white text-ink border-terracotta ring-2 ring-terracotta font-bold scale-105"
+                          : "bg-ink text-white border-white/40"
+                      }`}
+                    >
+                      <span
+                        className="w-2 h-2 rounded-full shrink-0"
+                        style={{ backgroundColor: stAlert.color }}
+                      />
+                      <span className="text-[11px] font-mono tabular-nums leading-none">
+                        {st.val.toFixed(0)}
+                      </span>
+                    </div>
+
+                    {/* Étiquette du lieu */}
+                    <div
+                      className={`text-[9px] whitespace-nowrap mt-0.5 text-center font-medium ${
+                        isSelected ? "text-terracotta font-bold" : "text-ink-subtle"
+                      }`}
+                    >
+                      {st.name.split(" ")[0]}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── 4. Infobulle station sélectionnée (en bas de carte) ── */}
+      {selectedStation && (
+        <div className="absolute bottom-12 left-4 z-40 max-w-sm p-3 bg-white/95 backdrop-blur-md rounded-[12px] shadow-card border border-sand-line text-xs space-y-1 animate-in fade-in duration-150">
+          {(() => {
+            const st = dakarStations.find((s) => s.id === selectedStation);
+            if (!st) return null;
+            const stAlert = getAlertLevel(st.val);
+            return (
+              <>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-medium text-ink flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-terracotta" />
+                    {st.name}
+                  </span>
+                  <span
+                    className="px-1.5 py-0.2 rounded text-[10px] font-medium text-white"
+                    style={{ backgroundColor: stAlert.color }}
+                  >
+                    {stAlert.label}
+                  </span>
+                </div>
+                <p className="text-[11px] text-ink-subtle">{st.commune}</p>
+                <div className="pt-1.5 mt-1 border-t border-sand-line/60 flex items-baseline justify-between tabular-nums">
+                  <span className="text-ink-muted">PM2.5 à {hour}h :</span>
+                  <strong className="font-serif text-sm font-medium text-ink">
+                    {st.val.toFixed(1).replace(".", ",")} µg/m³
+                  </strong>
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      )}
+
+      {/* ── 5. Bandeau informatif en bas (Vent, Harmattan, échelle) ── */}
+      <div className="relative z-30 px-4 py-2.5 bg-white/90 backdrop-blur-md border-t border-sand-line/60 flex flex-wrap items-center justify-between gap-2 text-xs text-ink-muted">
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1.5 text-terracotta font-medium">
+            <Wind className="w-3.5 h-3.5 animate-pulse" />
+            <span>Harmattan {windSpeed} m/s</span>
+          </span>
+          <span className="text-sand-line">·</span>
+          <span className="text-ink-subtle text-[11px]">
+            Flux de poussière arrivant du Sahara (Nord-Est) vers la presqu'île
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 text-[11px] text-ink-subtle">
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-[#3F7D58]" /> Bon
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-[#C99A1E]" /> Moyen
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-[#D2691E]" /> Mauvais
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-[#A8372C]" /> Très mauvais
+          </span>
+        </div>
       </div>
     </div>
   );
