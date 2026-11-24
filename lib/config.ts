@@ -1,6 +1,6 @@
 // ==============================================================================
-// PROJET DAKAR RESPIRE - CONFIGURATION GLOBALE TYPESCRIPT
-// Responsable Modélisation & Interface : Ibrahima Anne
+// PROJET DAKAR RESPIRE - CONFIGURATION & SEUILS SANITAIRES
+// Palette sourde : vert sourd, ocre, terre cuite, rouge brique
 // ==============================================================================
 
 export interface AlertLevel {
@@ -8,47 +8,42 @@ export interface AlertLevel {
   max: number;
   color: string;
   label: string;
-  iqaRange: string;
-  description: string;
-  recommandation: string;
+  shortAdvice: string;
+  advice: string;
 }
 
 export const ALERT_LEVELS: Record<string, AlertLevel> = {
   BON: {
     min: 0,
     max: 15,
-    color: "#10B981", // Vert
+    color: "#3F7D58", // Vert sourd
     label: "Bon",
-    iqaRange: "0 – 50",
-    description: "Peu ou pas de risque sanitaire.",
-    recommandation: "Qualité de l'air satisfaisante. Activités extérieures libres pour tous.",
+    shortAdvice: "Air sain pour tous",
+    advice: "Qualité de l'air satisfaisante. Aucune précaution requise pour les activités extérieures.",
   },
   MOYEN: {
     min: 15,
     max: 35,
-    color: "#FBBF24", // Jaune
+    color: "#C99A1E", // Ocre / jaune sourd
     label: "Moyen",
-    iqaRange: "51 – 100",
-    description: "Risques légers pour les personnes très vulnérables.",
-    recommandation: "Les personnes sensibles (asthmatiques, jeunes enfants) doivent modérer les efforts intenses prolongés.",
+    shortAdvice: "Sensibilité légère",
+    advice: "Les personnes vulnérables (enfants, asthmatiques) peuvent réduire les efforts prolongés en plein air.",
   },
   MAUVAIS: {
     min: 35,
     max: 55,
-    color: "#F97316", // Orange
+    color: "#D2691E", // Terre d'orange sourde
     label: "Mauvais",
-    iqaRange: "101 – 200",
-    description: "Risque élevé pour les personnes sensibles. Effets ressentis par tous.",
-    recommandation: "Réduire les activités sportives en plein air. Port du masque conseillé pour les personnes vulnérables.",
+    shortAdvice: "Effets sensibles",
+    advice: "Réduire les activités physiques intenses en extérieur. Port du masque conseillé aux personnes fragiles.",
   },
   TRES_MAUVAIS: {
     min: 55,
     max: 1000,
-    color: "#EF4444", // Rouge
-    label: "Très Mauvais (Alerte)",
-    iqaRange: "> 200",
-    description: "Alerte sanitaire : toute la population est affectée.",
-    recommandation: "Fermer les fenêtres, éviter toute sortie prolongée, port du masque filtrant fortement recommandé.",
+    color: "#A8372C", // Rouge brique sourd
+    label: "Très mauvais",
+    shortAdvice: "Alerte sanitaire",
+    advice: "Fermer les ouvertures et limiter les déplacements non essentiels, particulièrement lors des brumes de poussière.",
   },
 };
 
@@ -64,22 +59,3 @@ export const DAKAR_COORDINATES = {
   lon: -17.4467,
   name: "Dakar, Sénégal (Presqu'île du Cap-Vert)",
 };
-
-export const SCIENTIFIC_LIMITS = [
-  {
-    title: "Mesures satellitaires ≠ Concentration au sol",
-    desc: "L'AOD (Copernicus CAMS) et les gaz (Sentinel-5P) mesurent l'intégrale sur toute la colonne atmosphérique, jamais directement la teneur respirable au sol.",
-  },
-  {
-    title: "Sensibilité hygrométrique des capteurs low-cost",
-    desc: "Les capteurs optiques bon marché (AirGradient / OpenAQ) ont tendance à surestimer les PM2.5 en cas de forte humidité relative (> 80 %).",
-  },
-  {
-    title: "Sous-estimation des tempêtes brutales de poussière",
-    desc: "Les pics d'Harmattan (> 150 µg/m³) arrivent en quelques heures et sont souvent lissés par les algorithmes de régression statistique.",
-  },
-  {
-    title: "Données NASA POWER = Modèle de réanalyse",
-    desc: "Les variables météorologiques historiques issues de NASA POWER proviennent d'un modèle physique de réanalyse et non d'une station météo in situ.",
-  },
-];

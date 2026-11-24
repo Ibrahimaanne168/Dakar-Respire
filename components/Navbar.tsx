@@ -3,16 +3,26 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Wind, Activity, BarChart3, Database, ShieldAlert, BookOpen, Menu, X } from "lucide-react";
-import { AlertBadge } from "./AlertBadge";
+import { getAlertLevel } from "@/lib/config";
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [latestPm25, setLatestPm25] = useState<number>(31.2);
+  const [latestPm25, setLatestPm25] = useState<number>(28.5);
 
-  // Charger la dernière mesure si disponible
   useEffect(() => {
+    // Vérifier d'abord si une prévision locale personnalisée existe
+    const custom = localStorage.getItem("dakarrespire:v1:custom_prediction");
+    if (custom) {
+      try {
+        const parsed = JSON.parse(custom);
+        if (parsed.current_pm25) {
+          setLatestPm25(parsed.current_pm25);
+          return;
+        }
+      } catch (e) {}
+    }
+
     fetch("/model/forecast.json")
       .then((res) => res.json())
       .then((data) => {
@@ -22,105 +32,86 @@ export const Navbar: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { href: "/", label: "Accueil", icon: Activity },
-    { href: "/previsions", label: "Prévisions 24h", icon: Wind },
-    { href: "/modeles", label: "Modèles IA", icon: BarChart3 },
-    { href: "/donnees", label: "Données & Équipe", icon: Database },
-    { href: "/alertes", label: "Alertes & Santé", icon: ShieldAlert },
-    { href: "/methode", label: "Méthodologie", icon: BookOpen },
+    { href: "/", label: "Accueil" },
+    { href: "/previsions", label: "Prévisions" },
+    { href: "/modeles", label: "Modèle" },
+    { href: "/donnees", label: "Données" },
+    { href: "/alertes", label: "Alertes" },
+    { href: "/methode", label: "Méthode" },
   ];
 
+  const currentLevel = getAlertLevel(latestPm25);
+
   return (
-    <header className="sticky top-0 z-50 glass-panel border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo & Brand */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:scale-105 transition-transform">
-              <Wind className="w-5 h-5 text-slate-950" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
-                  Dakar Respire
-                </span>
-                <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                  IA 24H
-                </span>
-              </div>
-              <p className="text-xs text-slate-400 hidden sm:block">Qualité de l'air • Presqu'île du Cap-Vert</p>
-            </div>
-          </Link>
+    <header className="hairline-b bg-sand-surface/95 sticky top-0 z-40">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+        {/* Titre sobre */}
+        <Link
+          href="/"
+          className="font-serif text-lg tracking-tight text-ink hover:text-terracotta transition-colors"
+        >
+          Dakar Respire
+        </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                    isActive
-                      ? "bg-slate-800/90 text-teal-400 border border-teal-500/30 shadow-sm"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800/50"
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 ${isActive ? "text-teal-400" : "text-slate-400"}`} />
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Right Status Pill & Mobile Menu Button */}
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 bg-slate-900/90 border border-slate-800 rounded-full py-1 px-3">
-              <span className="text-xs text-slate-400">Actuel :</span>
-              <span className="text-xs font-bold text-slate-200">{latestPm25} µg/m³</span>
-              <AlertBadge pm25={latestPm25} size="sm" />
-            </div>
-
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg bg-slate-800/60 text-slate-300 hover:text-white hover:bg-slate-800 transition"
-              aria-label="Menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden bg-slate-900/95 border-b border-slate-800 px-4 pt-2 pb-4 space-y-1">
+        {/* 5 Liens en texte simple sans icône */}
+        <nav className="hidden md:flex items-center gap-6 text-sm text-ink-muted">
           {navLinks.map((link) => {
-            const Icon = link.icon;
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium transition ${
-                  isActive
-                    ? "bg-teal-500/10 text-teal-300 border border-teal-500/20"
-                    : "text-slate-300 hover:text-white hover:bg-slate-800"
+                className={`transition-colors hover:text-ink ${
+                  isActive ? "text-ink font-medium" : ""
                 }`}
               >
-                <Icon className="w-5 h-5 text-teal-400" />
                 {link.label}
               </Link>
             );
           })}
-          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-sm">
-            <span className="text-slate-400">Dernier relevé :</span>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-200">{latestPm25} µg/m³</span>
-              <AlertBadge pm25={latestPm25} size="sm" />
-            </div>
+        </nav>
+
+        {/* Indicateur discret à droite */}
+        <div className="hidden sm:flex items-center gap-2 text-xs text-ink-muted tabular-nums">
+          <span>PM2.5</span>
+          <span className="font-medium text-ink">{latestPm25.toFixed(1).replace(".", ",")} µg/m³</span>
+          <span className="text-sand-line">·</span>
+          <span className="inline-flex items-center gap-1.5">
+            <span
+              className="w-2 h-2 rounded-full inline-block"
+              style={{ backgroundColor: currentLevel.color }}
+            />
+            <span className="text-ink">{currentLevel.label}</span>
+          </span>
+        </div>
+
+        {/* Bouton mobile discret */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden text-xs text-ink-muted hover:text-ink p-1.5"
+          aria-label="Menu"
+        >
+          {mobileMenuOpen ? "Fermer" : "Menu"}
+        </button>
+      </div>
+
+      {/* Menu mobile dépliant sobre */}
+      {mobileMenuOpen && (
+        <div className="md:hidden hairline-t bg-sand-surface px-4 py-3 space-y-2 text-sm">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-1 text-ink-muted hover:text-ink"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <div className="pt-2 hairline-t text-xs text-ink-muted flex items-center gap-2">
+            <span>PM2.5 : {latestPm25.toFixed(1).replace(".", ",")} µg/m³</span>
+            <span>·</span>
+            <span style={{ color: currentLevel.color }}>{currentLevel.label}</span>
           </div>
         </div>
       )}
