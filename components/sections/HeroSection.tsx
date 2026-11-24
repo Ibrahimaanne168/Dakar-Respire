@@ -87,13 +87,13 @@ export default function HeroSection({
         </div>
       </div>
 
-      {/* ── 2. Carte Hero Principale (55 à 60 svh) : Grand Chiffre + Carte ── */}
-      <div className="dash-card p-0 sm:p-0 overflow-hidden flex flex-col lg:grid lg:grid-cols-12 min-h-[55svh] max-h-[85svh]">
-        {/* Volet Informations / Grand Chiffre (Premier rendu immédiat sans attendre) */}
-        <div className="p-4 sm:p-6 lg:col-span-5 flex flex-col justify-between bg-white z-10 border-b lg:border-b-0 lg:border-r border-sand-line/60">
+      {/* ── 2. Hero Mobile-First : Grand Chiffre + Carte Interactive Dakar ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4">
+        {/* Volet Informations / Grand Chiffre (Premier rendu immédiat) */}
+        <div className="dash-card p-4 sm:p-6 lg:col-span-5 flex flex-col justify-between bg-white border border-sand-line/70">
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs text-ink-subtle">
-              <span className="uppercase tracking-wider">Presqu'île du Cap-Vert</span>
+              <span className="uppercase tracking-wider font-medium text-ink-muted">Région de Dakar · Sénégal</span>
               <span className="font-mono text-terracotta font-medium">{selectedHour}:00 UTC</span>
             </div>
 
@@ -148,12 +148,12 @@ export default function HeroSection({
             source="Modèle ML / OpenAQ"
             period="Horizon 24 h"
             status={isSynthetic ? "Simulé" : "Modèle"}
-            className="pt-2 mt-2"
+            className="pt-2 mt-3"
           />
         </div>
 
-        {/* Volet Carte Interactive (Sénégal & Zoom Dakar) */}
-        <div className="lg:col-span-7 h-[280px] sm:h-[320px] lg:h-auto min-h-[260px] bg-[#F7F9FC] relative">
+        {/* Volet Carte Interactive : Sénégal Macro & Zoom Dakar */}
+        <div className="dash-card p-0 overflow-hidden lg:col-span-7 h-[360px] sm:h-[420px] lg:h-auto min-h-[340px] bg-[#F7F9FC] border border-sand-line/70">
           <DakarScene3D
             pm25={currentItem.pm25}
             hour={selectedHour}

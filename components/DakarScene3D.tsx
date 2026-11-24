@@ -103,8 +103,8 @@ export const DakarScene3D: React.FC<DakarSceneProps> = ({
   const senegalRegions = useMemo(
     () => [
       {
-        name: "Dakar (Presqu'île du Cap-Vert)",
-        role: "Zone d'étude principale",
+        name: "Région de Dakar",
+        role: "Zone d'étude principale (Sénégal)",
         x: 14.5,
         y: 45,
         pm25Val: Math.round(pm25),
@@ -215,35 +215,35 @@ export const DakarScene3D: React.FC<DakarSceneProps> = ({
   }, [pm25, windSpeed, windDeg, zoomLevel]);
 
   return (
-    <div className="relative w-full h-full min-h-[420px] sm:min-h-[460px] rounded-[18px] overflow-hidden select-none bg-[#F7F9FC] border border-sand-line/70 flex flex-col justify-between">
+    <div className="relative w-full h-full min-h-[340px] sm:min-h-[400px] overflow-hidden select-none bg-[#F7F9FC] flex flex-col justify-between">
       {/* ── 1. Barre supérieure de contrôle (Style Earthly / Capture 2) ── */}
-      <div className="absolute top-3 inset-x-3 z-30 flex items-center justify-between gap-2 pointer-events-none">
+      <div className="absolute top-2.5 inset-x-2.5 z-30 flex items-center justify-between gap-1.5 pointer-events-none">
         {/* Toggle Vue Sénégal ↔ Zoom Dakar */}
-        <div className="flex items-center p-1 bg-white/95 backdrop-blur-md rounded-pill shadow-card border border-sand-line pointer-events-auto">
+        <div className="flex items-center p-0.5 sm:p-1 bg-white/95 backdrop-blur-md rounded-pill shadow-card border border-sand-line pointer-events-auto">
           <button
             onClick={() => setZoomLevel("senegal")}
-            className={`px-3 py-1 text-xs rounded-pill transition-all font-medium flex items-center gap-1.5 ${
+            className={`px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs rounded-pill transition-all font-medium flex items-center gap-1 ${
               zoomLevel === "senegal"
                 ? "bg-ink text-white shadow-xs"
                 : "text-ink-muted hover:text-ink hover:bg-sand-surface"
             }`}
           >
-            <span>🇸🇳 Tout le Sénégal</span>
+            <span>🇸🇳 Sénégal</span>
           </button>
           <button
             onClick={() => setZoomLevel("dakar")}
-            className={`px-3 py-1 text-xs rounded-pill transition-all font-medium flex items-center gap-1.5 ${
+            className={`px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs rounded-pill transition-all font-medium flex items-center gap-1 ${
               zoomLevel === "dakar"
                 ? "bg-ink text-white shadow-xs"
                 : "text-ink-muted hover:text-ink hover:bg-sand-surface"
             }`}
           >
-            <span>📍 Zoom Dakar (Presqu'île)</span>
+            <span>📍 Dakar</span>
           </button>
         </div>
 
         {/* Boutons Zoom + / - */}
-        <div className="flex items-center gap-1 bg-white/95 backdrop-blur-md p-1 rounded-pill shadow-card border border-sand-line pointer-events-auto">
+        <div className="flex items-center gap-1 bg-white/95 backdrop-blur-md p-0.5 sm:p-1 rounded-pill shadow-card border border-sand-line pointer-events-auto">
           <button
             onClick={() => setZoomLevel("dakar")}
             title="Zoomer sur Dakar"
@@ -510,19 +510,19 @@ export const DakarScene3D: React.FC<DakarSceneProps> = ({
       )}
 
       {/* ── 5. Bandeau informatif en bas (Vent, Harmattan, échelle) ── */}
-      <div className="relative z-30 px-4 py-2.5 bg-white/90 backdrop-blur-md border-t border-sand-line/60 flex flex-wrap items-center justify-between gap-2 text-xs text-ink-muted">
-        <div className="flex items-center gap-3">
+      <div className="relative z-30 px-3 sm:px-4 py-2 bg-white/90 backdrop-blur-md border-t border-sand-line/60 flex flex-wrap items-center justify-between gap-1 text-[11px] sm:text-xs text-ink-muted">
+        <div className="flex items-center gap-2">
           <span className="flex items-center gap-1.5 text-terracotta font-medium">
             <Wind className="w-3.5 h-3.5 animate-pulse" />
             <span>Harmattan {windSpeed} m/s</span>
           </span>
-          <span className="text-sand-line">·</span>
-          <span className="text-ink-subtle text-[11px]">
-            Flux de poussière arrivant du Sahara (Nord-Est) vers la presqu'île
+          <span className="text-sand-line hidden sm:inline">·</span>
+          <span className="text-ink-subtle text-[11px] hidden sm:inline">
+            Flux de poussière du Sahara (NE) vers Dakar
           </span>
         </div>
 
-        <div className="flex items-center gap-2 text-[11px] text-ink-subtle">
+        <div className="flex items-center gap-2 text-[10px] sm:text-[11px] text-ink-subtle">
           <span className="flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-[#3F7D58]" /> Bon
           </span>
