@@ -56,6 +56,7 @@ export default function DonneesPage() {
 
       setReport({
         totalRows: lines.length - 1,
+        headersFound: headers.slice(0, 8),
         completeness: Math.round(((lines.length - 1 - missingCount) / (lines.length - 1)) * 100),
       });
 
@@ -84,13 +85,38 @@ export default function DonneesPage() {
     window.location.reload();
   };
 
-  const teamSources = [
-    { name: "Alioune Badara Sarr", task: "Étude des PM2.5 et poussières sahariennes", status: "Reçu" },
-    { name: "El Hadji Ibrahima Diop Sow", task: "Données météo NASA POWER 2019-2024", status: "Reçu en partie" },
-    { name: "Lamine Cissé", task: "Données satellites Copernicus CAMS et Sentinel-5P", status: "Sources transmises" },
-    { name: "Mously Sow", task: "Mesures réelles de stations au sol (CGQA)", status: "Rapport reçu" },
-    { name: "Papa Ibrahima Samb", task: "Regroupement, nettoyage et fichier propre final", status: "À venir" },
-    { name: "Sayon Sidibé", task: "Recherche scientifique, seuils et bibliographie", status: "À venir" },
+  // Les 5 emplacements uniques pour intégrer les fichiers attendus
+  const expectedSlots = [
+    {
+      file: "donnees_propres.csv",
+      author: "Papa Ibrahima Samb",
+      format: "CSV horaire (timestamp UTC, pm25, station, météo, satellite)",
+      status: "Emplacement actif via la zone de dépôt ci-dessus",
+    },
+    {
+      file: "sayon_config.json",
+      author: "Sayon Sidibé",
+      format: "JSON (seuils d'alerte, références sanitaires, limites)",
+      status: "Emplacement réservé dans lib/config.ts",
+    },
+    {
+      file: "meteo_nasa_power_hourly.csv",
+      author: "El Hadji Ibrahima Diop Sow",
+      format: "CSV horaire (date, temp, humidite, vent_ms, direction_deg)",
+      status: "Prévu dans data/raw/ (catalogue reçu, série en attente)",
+    },
+    {
+      file: "openaq_limamoulaye.csv & airnow_ambassade.csv",
+      author: "Mously Sow",
+      format: "CSV brut OpenAQ / AirNow des stations au sol",
+      status: "Prévu dans data/raw/ (rapport reçu, téléchargement en attente)",
+    },
+    {
+      file: "cams_aod_dakar.nc & sentinel5p.nc",
+      author: "Lamine Cissé",
+      format: "NetCDF / CSV de l'emprise 14,55°–14,85° N, −17,55°–−17,10° O",
+      status: "Prévu dans data/raw/ (sources documentées)",
+    },
   ];
 
   return (
@@ -98,10 +124,10 @@ export default function DonneesPage() {
       {/* En-tête */}
       <div>
         <h1 className="font-serif text-3xl sm:text-4xl font-normal text-ink">
-          Données et circuit de l'équipe
+          Données et intégration future
         </h1>
         <p className="mt-2 text-sm text-ink-muted">
-          Les prévisions actuellement affichées utilisent un jeu de données simulé calibré sur Dakar. Le fichier propre consolidé de Papa Ibrahima Samb peut être déposé directement ci-dessous.
+          Zone de dépôt du fichier consolidé de Papa Ibrahima Samb et points d'accueil pour chaque fichier de l'équipe.
         </p>
       </div>
 
@@ -109,20 +135,20 @@ export default function DonneesPage() {
       <div className="p-6 bg-sand-surface hairline space-y-4">
         <div>
           <h2 className="font-serif text-lg text-ink font-normal">
-            Déposer un nouveau fichier propre (CSV)
+            Déposer le fichier propre (donnees_propres.csv)
           </h2>
           <p className="text-xs text-ink-muted mt-0.5">
-            Le recalcul de la prévision s'effectue directement dans le navigateur sans renvoi vers un serveur.
+            Format cible : CSV horaire, timestamp en UTC, colonne 'pm25'. Les colonnes optionnelles (vent, humidité, AOD) sont détectées automatiquement.
           </p>
         </div>
 
         <label className="block border border-dashed border-sand-line hover:border-ink-muted p-6 text-center cursor-pointer transition-colors">
           <input type="file" accept=".csv" onChange={handleFileUpload} className="hidden" />
           <span className="text-xs text-ink">
-            {fileName ? fileName : "Sélectionner ou glisser un fichier CSV ici"}
+            {fileName ? fileName : "Cliquer ou glisser le fichier CSV propre ici"}
           </span>
           <span className="block text-[11px] text-ink-subtle mt-1">
-            Colonnes attendues : timestamp, pm25, wd, ws, rh, temp
+            Exemple : donnees_propres.csv (recalcul immédiat en TypeScript dans le navigateur)
           </span>
         </label>
 
@@ -140,46 +166,47 @@ export default function DonneesPage() {
               onClick={applyCustomData}
               className="bg-terracotta hover:bg-terracotta-hover text-sand-surface px-4 py-2 text-xs font-medium transition-colors"
             >
-              Appliquer à toutes les prévisions
+              Appliquer à toutes les prévisions du site
             </button>
           </div>
         )}
 
         {uploadStatus === "saved" && (
           <div className="pt-2 hairline-t flex items-baseline justify-between text-xs">
-            <span className="text-level-bon font-medium">Données réelles enregistrées et actives sur le site.</span>
+            <span className="text-level-bon font-medium">Données réelles enregistrées et actives sur l'ensemble du site.</span>
             <button onClick={resetToDefault} className="text-ink-muted hover:text-ink underline">
-              Rétablir la version initiale
+              Rétablir le modèle initial
             </button>
           </div>
         )}
       </div>
 
-      {/* État des sources sous forme de liste à filets */}
+      {/* Emplacements d'accueil pour chaque fichier attendu */}
       <div className="space-y-3 pt-2">
         <h2 className="font-serif text-lg text-ink font-normal">
-          État des travaux de l'équipe
+          Emplacements réservés pour les fichiers attendus
         </h2>
+        <p className="text-xs text-ink-muted">
+          L'architecture permet d'intégrer chaque livrable dès sa réception sans réécriture de code :
+        </p>
+
         <ul className="divide-y divide-sand-line hairline-t hairline-b text-xs">
-          {teamSources.map((s, i) => (
-            <li key={i} className="py-2.5 flex items-baseline justify-between gap-4">
-              <div>
-                <span className="text-ink font-medium">{s.name}</span>
-                <span className="text-ink-muted ml-2">· {s.task}</span>
+          {expectedSlots.map((slot, i) => (
+            <li key={i} className="py-3 space-y-1">
+              <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                <span className="font-mono text-ink font-medium">{slot.file}</span>
+                <span className="text-ink-subtle text-[11px]">{slot.author}</span>
               </div>
-              <span className={`tabular-nums shrink-0 ${
-                s.status === "Reçu" ? "text-level-bon" : "text-ink-subtle"
-              }`}>
-                {s.status}
-              </span>
+              <div className="text-ink-muted">{slot.format}</div>
+              <div className="text-terracotta text-[11px]">{slot.status}</div>
             </li>
           ))}
         </ul>
       </div>
 
-      {/* Note claire sur les données simulées */}
+      {/* Note d'honnêteté sur les données de démonstration */}
       <div className="p-4 bg-sand-surface hairline text-xs text-ink-muted leading-relaxed">
-        <strong className="text-ink font-medium">Note sur les données :</strong> Les prévisions par défaut du site proviennent d'un modèle entraîné sur une série simulée reproduisant les caractéristiques réelles de Dakar (pics du soir, creux nocturnes, dynamique de l'Harmattan). Dès réception du fichier propre de Papa Ibrahima Samb, celui-ci s'intègre via l'importateur ci-dessus sans aucune modification du code source.
+        <strong className="text-ink font-medium">Note d'honnêteté :</strong> Tant que le fichier propre de Papa Ibrahima Samb n'est pas déposé, les prévisions s'appuient sur une série synthétique calibrée reproduisant la saisonnalité et le cycle diurne de Dakar. L'étiquette « Données simulées » est visible sur toutes les pages.
       </div>
     </div>
   );

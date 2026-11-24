@@ -11,7 +11,6 @@ export const Navbar: React.FC = () => {
   const [latestPm25, setLatestPm25] = useState<number>(28.5);
 
   useEffect(() => {
-    // Vérifier d'abord si une prévision locale personnalisée existe
     const custom = localStorage.getItem("dakarrespire:v1:custom_prediction");
     if (custom) {
       try {
@@ -31,21 +30,21 @@ export const Navbar: React.FC = () => {
       .catch(() => {});
   }, []);
 
+  // 5 Liens en texte simple conformément au prompt
   const navLinks = [
     { href: "/", label: "Accueil" },
-    { href: "/previsions", label: "Prévisions" },
-    { href: "/modeles", label: "Modèle" },
+    { href: "/previsions", label: "Prévision" },
+    { href: "/preuve", label: "Preuve" },
+    { href: "/comprendre", label: "Comprendre" },
     { href: "/donnees", label: "Données" },
-    { href: "/alertes", label: "Alertes" },
-    { href: "/methode", label: "Méthode" },
   ];
 
   const currentLevel = getAlertLevel(latestPm25);
 
   return (
-    <header className="hairline-b bg-sand-surface/95 sticky top-0 z-40">
+    <header className="hairline-b bg-sand-surface sticky top-0 z-40">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-        {/* Titre sobre */}
+        {/* Nom du site sobre */}
         <Link
           href="/"
           className="font-serif text-lg tracking-tight text-ink hover:text-terracotta transition-colors"
@@ -54,9 +53,9 @@ export const Navbar: React.FC = () => {
         </Link>
 
         {/* 5 Liens en texte simple sans icône */}
-        <nav className="hidden md:flex items-center gap-6 text-sm text-ink-muted">
+        <nav className="hidden md:flex items-center gap-7 text-sm text-ink-muted">
           {navLinks.map((link) => {
-            const isActive = pathname === link.href;
+            const isActive = pathname === link.href || (link.href === "/preuve" && pathname === "/modeles");
             return (
               <Link
                 key={link.href}
@@ -71,7 +70,7 @@ export const Navbar: React.FC = () => {
           })}
         </nav>
 
-        {/* Indicateur discret à droite */}
+        {/* Petit indicateur discret à droite */}
         <div className="hidden sm:flex items-center gap-2 text-xs text-ink-muted tabular-nums">
           <span>PM2.5</span>
           <span className="font-medium text-ink">{latestPm25.toFixed(1).replace(".", ",")} µg/m³</span>
@@ -85,7 +84,7 @@ export const Navbar: React.FC = () => {
           </span>
         </div>
 
-        {/* Bouton mobile discret */}
+        {/* Menu mobile discret */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="md:hidden text-xs text-ink-muted hover:text-ink p-1.5"
@@ -95,7 +94,7 @@ export const Navbar: React.FC = () => {
         </button>
       </div>
 
-      {/* Menu mobile dépliant sobre */}
+      {/* Menu mobile sobre */}
       {mobileMenuOpen && (
         <div className="md:hidden hairline-t bg-sand-surface px-4 py-3 space-y-2 text-sm">
           {navLinks.map((link) => (

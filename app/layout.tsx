@@ -40,24 +40,24 @@ export default function RootLayout({
             <div>
               <span className="font-serif text-sm text-ink font-medium">Dakar Respire</span>
               <p className="mt-1 text-ink-subtle">
-                Prévision horaire des particules fines PM2.5 sur la presqu'île du Cap-Vert.
+                Prévision horaire des particules fines PM2.5 sur la presqu'île du Cap-Vert · Concours Mathématiques et Modélisation.
               </p>
             </div>
-            <div className="flex flex-wrap gap-4 text-ink-muted">
-              <Link href="/previsions" className="hover:text-ink transition-colors">
-                Prévisions
+            <div className="flex flex-wrap gap-5 text-ink-muted">
+              <Link href="/" className="hover:text-ink transition-colors">
+                Accueil
               </Link>
-              <Link href="/modeles" className="hover:text-ink transition-colors">
-                Modèle
+              <Link href="/previsions" className="hover:text-ink transition-colors">
+                Prévision
+              </Link>
+              <Link href="/preuve" className="hover:text-ink transition-colors">
+                Preuve
+              </Link>
+              <Link href="/comprendre" className="hover:text-ink transition-colors">
+                Comprendre
               </Link>
               <Link href="/donnees" className="hover:text-ink transition-colors">
                 Données
-              </Link>
-              <Link href="/alertes" className="hover:text-ink transition-colors">
-                Alertes
-              </Link>
-              <Link href="/methode" className="hover:text-ink transition-colors">
-                Méthode
               </Link>
             </div>
           </div>

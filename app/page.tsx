@@ -4,13 +4,13 @@ import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
-import { getAlertLevel } from "@/lib/config";
+import { getAlertLevel, ALIOUNE_FACTS } from "@/lib/config";
 
 const DakarScene3D = dynamic(() => import("@/components/DakarScene3D"), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full min-h-[380px] bg-sand-surface flex items-center justify-center text-xs text-ink-muted hairline">
-      Chargement de la vue de Dakar…
+      Vue de la presqu'île du Cap-Vert…
     </div>
   ),
 });
@@ -44,7 +44,6 @@ export default function HomePage() {
   const hourly = data?.hourly || [];
   const currentLevel = getAlertLevel(currentPm25);
 
-  // Données de la petite courbe sobre (sparkline)
   const sparklineData = hourly.map((h: any) => ({
     hour: `${h.hour}h`,
     pm25: h.pm25,
@@ -63,7 +62,7 @@ export default function HomePage() {
         />
       </section>
 
-      {/* 2. Le très grand chiffre, niveau en mots et phrase simple */}
+      {/* 2. Le très grand chiffre, niveau IQA en mots et étiquette d'honnêteté */}
       <section className="space-y-4">
         <div className="flex items-center gap-3">
           <span className="text-xs uppercase tracking-wider text-ink-muted">
@@ -91,6 +90,9 @@ export default function HomePage() {
             <span className="font-serif text-2xl text-ink font-normal">
               {currentLevel.label}
             </span>
+            <span className="text-xs text-ink-muted tabular-nums ml-1">
+              (IQA {currentLevel.iqaMin}–{currentLevel.iqaMax})
+            </span>
           </div>
         </div>
 
@@ -99,11 +101,11 @@ export default function HomePage() {
           <strong className="text-ink font-medium tabular-nums">
             {peakPm25.toFixed(1).replace(".", ",")} µg/m³
           </strong>
-          . Vents de secteur nord-est apportant une brume de poussière modérée.
+          . Vents de nord-est (Harmattan) acheminant une brume sèche de poussière saharienne.
         </p>
       </section>
 
-      {/* 3. Petite courbe des prochaines 24 h, sans cadre ni légende */}
+      {/* 3. Petit aperçu sobre de l'évolution sur 24 h */}
       <section className="space-y-2 pt-4 hairline-t">
         <div className="flex items-center justify-between text-xs text-ink-muted">
           <span>Évolution prévue sur 24 heures</span>
@@ -142,8 +144,52 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. Un seul bouton sobre */}
-      <section className="pt-2">
+      {/* 4. Récit : Pourquoi Dakar respire mal (recherches d'Alioune Badara Sarr) */}
+      <section className="pt-6 hairline-t space-y-6 max-w-2xl">
+        <h2 className="font-serif text-2xl font-normal text-ink">
+          Pourquoi Dakar respire mal
+        </h2>
+
+        <div className="space-y-4 text-sm text-ink-muted leading-relaxed">
+          <p>
+            En 2024, la concentration moyenne annuelle à Dakar atteignait environ{" "}
+            <strong className="text-ink font-medium tabular-nums">{ALIOUNE_FACTS.annualMean2024} µg/m³</strong>{" "}
+            (selon les synthèses IQAir), soit <strong className="text-ink font-medium">{ALIOUNE_FACTS.ratioWhoAnnual}</strong> le seuil annuel recommandé par l'Organisation Mondiale de la Santé (5 µg/m³ par an, et 15 µg/m³ sur 24 h).
+          </p>
+
+          <p>
+            D'où proviennent ces particules fines ? Les ordres de grandeur documentés lors de la campagne de saison sèche de 2009 mettent en évidence un mélange spécifique à la presqu'île :
+          </p>
+
+          <ul className="divide-y divide-sand-line hairline-t hairline-b text-xs py-1">
+            {ALIOUNE_FACTS.sources2009Campaign.map((src, i) => (
+              <li key={i} className="py-2 flex items-baseline justify-between gap-4">
+                <span className="text-ink font-medium">{src.label}</span>
+                <span className="text-ink-subtle">{src.note}</span>
+                <span className="tabular-nums font-medium text-ink shrink-0">{src.share}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-[11px] text-ink-subtle">
+            * Ordres de grandeur issus de la campagne de saison sèche 2009 (source : Alioune Badara Sarr).
+          </p>
+
+          <div className="pt-2 space-y-2">
+            <h3 className="font-serif text-base text-ink font-normal">
+              Deux régimes saisonniers très marqués
+            </h3>
+            <p>
+              <strong>De novembre à mars :</strong> la saison sèche correspond aux pics de pollution (maximum entre décembre et février). L'Harmattan, vent chaud et sec de nord-est, transporte d'épaisses brumes sèches de poussière saharienne qui stagnent sur la ville.
+            </p>
+            <p>
+              <strong>De juillet à septembre :</strong> pendant l'hivernage, les précipitations lessivent l'air et les flux maritimes d'ouest réduisent nettement les teneurs en poussières.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Un seul bouton sobre */}
+      <section className="pt-4">
         <Link
           href="/previsions"
           className="inline-block bg-terracotta hover:bg-terracotta-hover text-sand-surface px-5 py-2.5 text-sm font-medium transition-colors"
