@@ -1,0 +1,25 @@
+{
+  "name": "Dakar Respire — Qualité de l'Air",
+  "short_name": "Dakar Respire",
+  "description": "Prévision horaire des particules fines PM2.5 sur Dakar",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F4EFE6",
+  "theme_color": "#F4EFE6",
+  "orientation": "portrait",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "/images/senegal-dakar-map.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/senegal-dakar-map.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

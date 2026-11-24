@@ -1,237 +1,174 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { POLLUTION_SOURCES, SEASON_RIBBON } from "@/lib/dashboardData";
 import DataMetadata from "@/components/DataMetadata";
 import StatusBadge from "@/components/StatusBadge";
-import { Wind, Calendar, Info } from "lucide-react";
+import { Wind, Calendar } from "lucide-react";
 
 export default function SourcesSection() {
-  return (
-    <section id="sources" className="space-y-6 pt-6">
-      {/* ── 1. Donut et tableau de légende des sources (Alioune, Campagne 2009) ── */}
-      <div className="dash-card space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-sand-line/60">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs uppercase tracking-wider text-ink-subtle font-medium">
-                Section ③ · Recherche d'Alioune Badara Sarr
-              </span>
-              <StatusBadge status="Mesuré" size="sm" />
-            </div>
-            <h2 className="font-serif text-2xl text-ink font-normal mt-1">
-              D'où proviennent les particules fines à Dakar ?
-            </h2>
-            <p className="text-xs text-ink-muted mt-0.5">
-              Ordres de grandeur documentés lors de la campagne de saison sèche 2009 sur la presqu'île
-            </p>
-          </div>
+  const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(0);
 
-          <div className="text-right">
-            <span className="text-xs text-ink-subtle block">Source scientifique</span>
-            <span className="text-xs font-medium text-ink">Campagne POLCA / Alioune B. Sarr</span>
+  // Abréviation compacte des 12 mois pour mobile (J, F, M, A, M, J, J, A, S, O, N, D)
+  const monthLetters = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+
+  return (
+    <section id="sources" className="space-y-4 pt-4">
+      {/* ── 1. Donut centré et légende en liste dessous ── */}
+      <div className="dash-card space-y-4 p-4 sm:p-6">
+        <div className="flex flex-col gap-1 pb-3 border-b border-sand-line/60">
+          <div className="flex items-center justify-between">
+            <span className="text-xs uppercase tracking-wider text-ink-subtle font-medium">
+              Section ③ · Origine des poussières
+            </span>
+            <StatusBadge status="Mesuré" size="sm" />
           </div>
+          <h2 className="font-serif text-xl sm:text-2xl text-ink font-normal">
+            D'où proviennent les particules fines ?
+          </h2>
+          <p className="text-xs text-ink-muted">
+            Campagne de saison sèche 2009 (synthèse Alioune Badara Sarr)
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Donut Chart (style capture 3) */}
-          <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
-            <div className="w-56 h-56 sm:w-64 sm:h-64 relative">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Tooltip
-                    content={({ active, payload }) => {
-                      if (active && payload && payload.length) {
-                        const item = payload[0].payload as any;
-                        return (
-                          <div className="bg-white rounded-lg p-2.5 shadow-card border border-sand-line text-xs space-y-1">
-                            <div className="font-medium text-ink">{item.name}</div>
-                            <div className="text-terracotta font-serif text-sm">
-                              Fourchette : {item.range}
-                            </div>
-                            <div className="text-[11px] text-ink-subtle">{item.description}</div>
-                          </div>
-                        );
-                      }
-                      return null;
-                    }}
-                  />
-                  <Pie
-                    data={POLLUTION_SOURCES}
-                    dataKey="share"
-                    nameKey="name"
-                    innerRadius={68}
-                    outerRadius={96}
-                    paddingAngle={3}
-                    stroke="#FFFFFF"
-                    strokeWidth={2}
-                  >
-                    {POLLUTION_SOURCES.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
+        {/* Donut centré */}
+        <div className="flex flex-col items-center justify-center pt-1">
+          <div className="w-48 h-48 sm:w-56 sm:h-56 relative">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={POLLUTION_SOURCES}
+                  dataKey="share"
+                  nameKey="name"
+                  innerRadius={58}
+                  outerRadius={84}
+                  paddingAngle={3}
+                  stroke="#FFFFFF"
+                  strokeWidth={2}
+                  onClick={(_, index) => setActiveSourceIndex(index)}
+                >
+                  {POLLUTION_SOURCES.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={entry.color}
+                      opacity={activeSourceIndex === index ? 1 : 0.85}
+                      className="cursor-pointer"
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
 
-              {/* Texte au centre du donut */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center px-4">
-                <span className="text-[11px] uppercase tracking-wider text-ink-subtle">Source n°1</span>
-                <span className="font-serif text-2xl font-normal text-ink leading-tight">
-                  Trafic
-                </span>
-                <span className="text-xs font-medium text-terracotta tabular-nums">≈ 49 %</span>
-              </div>
+            {/* Texte au centre */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center px-2">
+              <span className="text-[10px] uppercase tracking-wider text-ink-subtle">Secteur n°1</span>
+              <span className="font-serif text-xl font-normal text-ink leading-tight">
+                Trafic
+              </span>
+              <span className="text-xs font-medium text-terracotta tabular-nums">≈ 49 %</span>
             </div>
-            <p className="text-[11px] text-ink-subtle mt-2">Survoler pour afficher le détail</p>
           </div>
+          <p className="text-[11px] text-ink-subtle mt-1">Toucher un segment pour mettre en valeur</p>
+        </div>
 
-          {/* Tableau de légende détaillé avec fourchettes réelles */}
-          <div className="lg:col-span-7 overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="border-b border-sand-line text-ink-subtle font-normal">
-                  <th className="py-2.5 pr-4 font-normal">Secteur émetteur</th>
-                  <th className="py-2.5 pr-4 font-normal">Fourchette documentée</th>
-                  <th className="py-2.5 font-normal">Processus d'émission</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-sand-line/60">
-                {POLLUTION_SOURCES.map((src, i) => (
-                  <tr key={i} className="hover:bg-sand-surface/60 transition-colors">
-                    <td className="py-3 pr-4">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className="w-2.5 h-2.5 rounded-full shrink-0"
-                          style={{ backgroundColor: src.color }}
-                        />
-                        <span className="font-medium text-ink">{src.name}</span>
-                      </div>
-                    </td>
-                    <td className="py-3 pr-4">
-                      <span className="font-serif text-sm font-medium text-ink tabular-nums">
-                        {src.range}
-                      </span>
-                    </td>
-                    <td className="py-3 text-ink-muted text-[11px] leading-relaxed">
-                      {src.description}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        {/* Légende en liste dessous (une ligne par source avec fourchette) */}
+        <div className="space-y-2 pt-2 border-t border-sand-line/60">
+          {POLLUTION_SOURCES.map((src, i) => {
+            const isHighlighted = activeSourceIndex === i;
+            return (
+              <div
+                key={i}
+                onClick={() => setActiveSourceIndex(i)}
+                className={`p-2.5 rounded-[12px] border transition-all cursor-pointer flex items-center justify-between text-xs ${
+                  isHighlighted
+                    ? "bg-sand-surface border-terracotta ring-1 ring-terracotta shadow-xs"
+                    : "bg-white border-sand-line/60 hover:bg-sand-surface/60"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span
+                    className="w-2.5 h-2.5 rounded-full shrink-0"
+                    style={{ backgroundColor: src.color }}
+                  />
+                  <div>
+                    <span className="font-medium text-ink block">{src.name}</span>
+                    <span className="text-[11px] text-ink-subtle block">{src.description}</span>
+                  </div>
+                </div>
+                <span className="font-serif text-sm font-medium text-ink tabular-nums shrink-0 ml-2">
+                  {src.range}
+                </span>
+              </div>
+            );
+          })}
         </div>
 
         <DataMetadata
-          unit="Pourcentage (%)"
-          source="Alioune Badara Sarr (synthèse POLCA 2009)"
-          period="Campagne de saison sèche"
+          unit="%"
+          source="Alioune B. Sarr / Campagne 2009"
+          period="Ordres de grandeur"
           status="Mesuré"
         />
       </div>
 
-      {/* ── 2. Ruban des 12 mois de saisonnalité + Encadré Harmattan ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Ruban des saisons (12 mois) */}
-        <div className="dash-card lg:col-span-8 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-sand-line/60">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-terracotta" />
-              <h3 className="font-serif text-base text-ink font-normal">
-                Cycle saisonnier annuel (12 mois)
-              </h3>
-            </div>
-            <StatusBadge status="Mesuré" size="sm" />
+      {/* ── 2. Ruban des 12 mois compact sur une ligne ── */}
+      <div className="dash-card space-y-3 p-4 sm:p-6">
+        <div className="flex items-center justify-between pb-2 border-b border-sand-line/60">
+          <div className="flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-terracotta" />
+            <h3 className="font-serif text-sm font-normal text-ink">
+              Régime saisonnier annuel (12 mois)
+            </h3>
           </div>
-
-          <p className="text-xs text-ink-muted">
-            Deux régimes distincts rythment la qualité de l'air à Dakar. Les mois non documentés lors de la campagne de mesure sont indiqués de façon transparente.
-          </p>
-
-          {/* Grille des 12 mois */}
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 pt-2">
-            {SEASON_RIBBON.map((m, idx) => {
-              let bg = "bg-sand-surface border-sand-line text-ink-muted";
-              let badgeBg = "bg-white text-ink-subtle";
-
-              if (m.status === "pic") {
-                bg = "bg-[#FDF0EC] border-[#A8372C]/30 text-[#A8372C]";
-                badgeBg = "bg-[#A8372C] text-white";
-              } else if (m.status === "eleve") {
-                bg = "bg-[#FCF5E8] border-[#C99A1E]/30 text-[#8C5E09]";
-                badgeBg = "bg-[#C99A1E] text-white";
-              } else if (m.status === "minimum") {
-                bg = "bg-[#EAF3ED] border-[#3F7D58]/30 text-[#24613B]";
-                badgeBg = "bg-[#3F7D58] text-white";
-              }
-
-              return (
-                <div
-                  key={idx}
-                  className={`border rounded-[14px] p-2.5 flex flex-col justify-between min-h-[96px] ${bg} transition-all hover:shadow-sm`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-serif text-sm font-medium">{m.month}</span>
-                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-medium ${badgeBg}`}>
-                      {m.label}
-                    </span>
-                  </div>
-                  <p className="text-[10px] leading-tight text-ink-muted mt-2">{m.comment}</p>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="text-[11px] text-ink-subtle pt-2 flex flex-wrap items-center gap-4">
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#A8372C]" /> Pics annuels (Décembre – Février)
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#C99A1E]" /> Élevé (Novembre & Mars)
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#3F7D58]" /> Minimum annuel (Juillet – Septembre)
-            </span>
-          </div>
-
-          <DataMetadata
-            source="IQAir / Alioune B. Sarr"
-            period="Année calendaire"
-            status="Mesuré"
-          />
+          <StatusBadge status="Mesuré" size="sm" />
         </div>
 
-        {/* Encadré Harmattan */}
-        <div className="dash-card lg:col-span-4 flex flex-col justify-between space-y-4 bg-gradient-to-b from-white to-[#FAF6EE]">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 text-terracotta">
-              <Wind className="w-4 h-4" />
-              <h3 className="font-serif text-base text-ink font-normal">
-                Le phénomène de l'Harmattan
-              </h3>
-            </div>
+        <p className="text-xs text-ink-muted">
+          Pics en saison sèche sous l'Harmattan (décembre–février), minimum en hivernage (juillet–septembre).
+        </p>
 
-            <p className="text-xs text-ink-muted leading-relaxed">
-              L'Harmattan est un alizé continental chaud et très sec soufflant du nord-est depuis le Sahara. En traversant le Sahel, il arrache des tonnes de particules minérales très fines (diamètre inférieur à 2,5 µm) qui s'accumulent au-dessus de la presqu'île du Cap-Vert.
-            </p>
+        {/* 12 cases compactes sur une seule ligne (J F M A M J J A S O N D) */}
+        <div className="grid grid-cols-12 gap-1 pt-1 text-center">
+          {SEASON_RIBBON.map((m, idx) => {
+            let bg = "bg-sand-surface text-ink-muted border-sand-line";
+            if (m.status === "pic") bg = "bg-[#A8372C] text-white border-[#A8372C]";
+            else if (m.status === "eleve") bg = "bg-[#C99A1E] text-white border-[#C99A1E]";
+            else if (m.status === "minimum") bg = "bg-[#3F7D58] text-white border-[#3F7D58]";
 
-            <div className="p-3 bg-white rounded-[12px] border border-sand-line/70 text-xs space-y-1.5">
-              <div className="font-medium text-ink">Signature physique à Dakar :</div>
-              <ul className="text-ink-muted text-[11px] space-y-1 list-disc list-inside">
-                <li>Vent directionnel : 20° à 80° (secteur Nord-Est).</li>
-                <li>Chute de visibilité horizontale &lt; 5 km.</li>
-                <li>Humidité relative fréquemment inférieure à 30%.</li>
-                <li>Pics journaliers pouvant excéder 150 µg/m³.</li>
-              </ul>
-            </div>
+            return (
+              <div
+                key={idx}
+                className={`py-2 rounded-md border text-[11px] font-medium ${bg}`}
+                title={`${m.month} : ${m.label}`}
+              >
+                <span>{monthLetters[idx]}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-ink-subtle pt-1">
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-[#A8372C]" /> Pics (D–F)
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-[#C99A1E]" /> Élevé (N, M)
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-[#3F7D58]" /> Minimum (J–S)
+          </span>
+        </div>
+
+        {/* Encadré court Harmattan */}
+        <div className="p-3 bg-[#FAF6EE] rounded-[12px] border border-sand-line text-xs space-y-1 mt-2">
+          <div className="font-medium text-ink flex items-center gap-1.5 text-terracotta">
+            <Wind className="w-3.5 h-3.5" />
+            <span>L'Harmattan en bref</span>
           </div>
-
-          <DataMetadata
-            source="Étude Harmattan (Alioune B. Sarr)"
-            status="Mesuré"
-            className="pt-2"
-          />
+          <p className="text-ink-muted text-[11px] leading-relaxed">
+            Vent sec de nord-est qui transporte les poussières du Sahara sur Dakar, saturant l'atmosphère de particules fines insolubles.
+          </p>
         </div>
       </div>
     </section>
