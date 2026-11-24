@@ -365,17 +365,17 @@ export const SOURCES_STATE_TABLE: SourceState[] = [
     comment: "À venir : fusion et imputation temporelle. Emplacement de dépôt actif sur le site.",
   },
   {
-    source: "Seuils sanitaires & documentation (sayon_config.json)",
+    source: "Recherche scientifique & Seuils réglementaires",
     responsible: "Sayon Sidibé",
-    coverage: "Normes CGQA et OMS",
+    coverage: "Normes CGQA (NS 05-062), OMS 2021 & Littérature",
     timeStep: "—",
-    status: "À venir",
-    statusType: "À venir",
-    comment: "À venir : validation de la grille de correspondance IQA / PM2.5.",
+    status: "Reçu",
+    statusType: "Mesuré",
+    comment: "Reçu (24/11/2026) : Rapport complet en 4 parties intégrant Sow (2021), Toure (2019), Léon (2020), Gueye (2025), justification des limites du satellite et grille officielle CGQA.",
   },
 ];
 
-// 6. Benchmark comparatif des modèles
+// 6. Benchmark comparatif des modèles (complété par les recherches de Sayon Sidibé)
 export interface ModelBenchmark {
   name: string;
   r2: number;
@@ -389,14 +389,24 @@ export interface ModelBenchmark {
 
 export const MODELS_BENCHMARK: ModelBenchmark[] = [
   {
-    name: "CatBoost (Optimisé)",
+    name: "LSTM Deep Learning (Gueye et al. 2025)",
+    r2: 0.884,
+    rmse: 3.20,
+    mae: 2.15,
+    rmseDry: 4.10,
+    rmseWet: 2.05,
+    status: "Mesuré",
+    note: "Référence académique Dakar (station Bel Air sur 4 ans). Prévisions jusqu'à J+7 (Sustainability, 2025).",
+  },
+  {
+    name: "CatBoost (Optimisé équipe)",
     r2: 0.832,
     rmse: 9.15,
     mae: 6.42,
     rmseDry: 10.95,
     rmseWet: 4.85,
     status: "Simulé",
-    note: "Modèle recommandé. Arbres avec gestion native des lags et saisonnalité.",
+    note: "Modèle tabulaire recommandé. Arbres avec gestion native des lags et saisonnalité.",
   },
   {
     name: "HistGradientBoosting",
@@ -416,7 +426,17 @@ export const MODELS_BENCHMARK: ModelBenchmark[] = [
     rmseDry: 12.35,
     rmseWet: 5.48,
     status: "Simulé",
-    note: "Forêt d'arbres de régression (100 estimateurs).",
+    note: "Forêt d'arbres de régression (100 estimateurs multi-variables).",
+  },
+  {
+    name: "ARIMA classique (Baseline Gueye 2025)",
+    r2: 0.612,
+    rmse: 6.80,
+    mae: 4.95,
+    rmseDry: 8.40,
+    rmseWet: 3.80,
+    status: "Mesuré",
+    note: "Série temporelle linéaire pure. Incapable de capturer les relations non-linéaires météo.",
   },
   {
     name: "Régression Ridge (Linéaire)",
@@ -451,6 +471,7 @@ export const MODELS_BENCHMARK: ModelBenchmark[] = [
 ];
 
 // 7. Expérience de recherche : « Le satellite améliore-t-il la prévision au sol ? »
+// Enrichie par la preuve empirique de Léon, Martiny & Merlet (Remote Sensing, 2020)
 export const SATELLITE_EXPERIMENT = [
   {
     setup: "1. Météo seule",
@@ -464,13 +485,115 @@ export const SATELLITE_EXPERIMENT = [
     variables: "Météo + lags PM2.5 (1h, 3h, 6h, 24h, 48h)",
     r2: 0.81,
     rmse: 9.4,
-    comment: "Saut de performance majeur : l'inertie locale porte l'essentiel du signal.",
+    comment: "Saut de performance majeur : l'inertie locale de la station porte l'essentiel du signal.",
   },
   {
     setup: "3. Météo + Historique + AOD Satellite CAMS",
     variables: "Ensemble ci-dessus + AOD 550nm et traceurs gazeux",
     r2: 0.81,
     rmse: 9.3,
-    comment: "Gain marginal à 24 h car le passé immédiat de la station contient déjà la poussière accumulée.",
+    comment: "Gain marginal à 24 h. Expliqué par Léon et al. (2020) : l'AOD colonne seule n'a qu'un R² de 0,15 avec le sol au Sahel sans profil vertical lidar (CALIOP).",
   },
 ];
+
+// 8. Synthèse complète des recherches scientifiques de Sayon Sidibé
+export const SAYON_RESEARCH_CONTENT = {
+  title: "Recherche scientifique complémentaire — Sayon Sidibé",
+  document: "donnees/RECHERCHE SCIENTIFIQUE COMPLEMENTAIRE.docx",
+  date: "24 novembre 2026",
+  parts: [
+    {
+      id: "partie1",
+      number: "Partie I",
+      title: "Études scientifiques sur la pollution de l'air à Dakar et dans le Sahel",
+      studies: [
+        {
+          citation: "Sow, B., Tchanche, B., Fall, I., Souaré, S., & Mbow-Diokhané, A. (2021)",
+          title: "Monitoring of Atmospheric Pollutant Concentrations in the City of Dakar, Senegal",
+          journal: "Open Journal of Air Pollution, 10, 18-30. DOI: 10.4236/ojap.2021.101002",
+          findings: "Données du Centre de Gestion de la Qualité de l'Air (CGQA). PM10 entre 120 et 180 µg/m³, PM2.5 entre 25 et 48 µg/m³. Forte dégradation en saison sèche (novembre à mai, Harmattan) et amélioration nette en saison des pluies (juin à octobre) par lessivage atmosphérique.",
+          takeaway: "Justifie le choix des PM2.5 comme indicateur prioritaire et la modélisation de la saisonnalité.",
+        },
+        {
+          citation: "Toure, N. O., et al. (2019)",
+          title: "Observed and Modeled Seasonal Air Quality and Respiratory Health in Senegal During 2015 and 2016",
+          journal: "GeoHealth, 3(12), 423-442. DOI: 10.1029/2019GH000214",
+          findings: "Couplage mesures au sol, données satellitaires d'aérosols et simulations météorologiques WRF avec données sanitaires (infections respiratoires aiguës, asthme, bronchite). Pics majeurs de décembre à février.",
+          takeaway: "Prouve que le transport des poussières sahariennes affecte tout le Sénégal et valide l'intégration de la météo numérique (WRF/ERA5).",
+        },
+        {
+          citation: "Léon, J.-F., Martiny, N., & Merlet, S. (2020)",
+          title: "A Multi Linear Regression Model to Derive Dust PM10 in the Sahel Using AERONET AOD and CALIOP Aerosol Layer Products",
+          journal: "Remote Sensing, 12(18), 3099. DOI: 10.3390/rs12183099",
+          findings: "Étude sur M'Bour (Sénégal), Banizoumbou (Niger) et Cinzana (Mali). L'AOD satellitaire seule n'explique que R² = 0,15 des concentrations au sol. L'ajout des paramètres de distribution verticale CALIOP fait grimper le R² ajusté à 0,75.",
+          takeaway: "Explication théorique cruciale : l'AOD satellitaire seule ne suffit pas pour prédire la pollution respirée au sol sans profil altimétrique.",
+        },
+        {
+          citation: "Source Apportionment Dakar & Bamako (2023)",
+          title: "Source Apportionment of Ambient Particulate Matter in Two Western African Urban Sites",
+          journal: "Atmosphere, 14(4), 684",
+          findings: "Application de méthodes PCA et PMF pour séparer la contribution du trafic routier, des poussières minérales désertiques et des sources industrielles locales.",
+          takeaway: "Valide la superposition des sources locales anthropiques (trafic) et régionales naturelles (Harmattan).",
+        },
+      ],
+    },
+    {
+      id: "partie2",
+      number: "Partie II",
+      title: "Analyse des méthodes de prédiction (Statistiques, Machine Learning, Deep Learning, Numérique)",
+      methodsComparison: [
+        { method: "ARIMA", type: "Statistique", usage: "Prévision séries temporelles", limit: "Relations non linéaires difficiles à représenter" },
+        { method: "Régression multiple", type: "Statistique", usage: "Estimation des concentrations", limit: "Hypothèse de linéarité stricte" },
+        { method: "Random Forest", type: "Machine Learning", usage: "Arbres multi-variables", limit: "Moins précis sur événements extrêmes rares" },
+        { method: "XGBoost / CatBoost", type: "Machine Learning", usage: "Gradient boosting tabulaire", limit: "Nécessite bon réglage d'hyperparamètres" },
+        { method: "LSTM (Gueye 2025)", type: "Deep Learning", usage: "Prévision temporelle Dakar Bel Air", limit: "Besoin de données d'entraînement continues" },
+        { method: "WRF / WRF-Chem", type: "Modélisation numérique", usage: "Transport et chimie atmosphérique", limit: "Coût de calcul élevé" },
+      ],
+      keyStudy: "Gueye et al. (2025, Sustainability) à Dakar Bel Air : le LSTM bat nettement ARIMA (RMSE 3,2 µg/m³ contre 6,8 µg/m³) sur 4 années de données journalières et permet des prévisions fiables jusqu'à 7 jours.",
+    },
+    {
+      id: "partie3",
+      number: "Partie III",
+      title: "Limites physiques des données satellitaires",
+      limits: [
+        {
+          point: "1. Colonne optique totale (AOD) vs Surface respirée",
+          detail: "L'AOD intègre toute la colonne atmosphérique traversée par les rayons solaires. Des aérosols circulant à 3 000 m d'altitude élèvent l'AOD sans affecter directement l'air respiré au sol (confirmé par Léon et al. 2020).",
+        },
+        {
+          point: "2. Conditions météorologiques et humidité",
+          detail: "Couverture nuageuse bloquante en hivernage et gonflement hygroscopique des particules sous forte humidité marine (> 80 %) faussant la réflectance optique.",
+        },
+        {
+          point: "3. Résolution spatiale insuffisante",
+          detail: "Un pixel de satellite (ex. 7×3,5 km ou 10×10 km) moyenne toute une zone et gomme les contrastes locaux entre zones industrielles, axes denses et bord de mer.",
+        },
+        {
+          point: "4. Résolution temporelle limitée",
+          detail: "La plupart des satellites en orbite héliosynchrone (Sentinel-5P, MODIS) ne passent qu'une fois par jour, ratant le cycle diurne à deux pics (matin 8h et soir 20h).",
+        },
+        {
+          point: "5. Déficit de réseaux de capteurs de référence au Sahel",
+          detail: "Le manque de stations physiques permanentes certifiées rend délicat l'étalonnage au sol des produits satellitaires.",
+        },
+      ],
+    },
+    {
+      id: "partie4",
+      number: "Partie IV",
+      title: "Normes réglementaires et définition des seuils d'alerte",
+      standards: {
+        who2021: "Lignes directrices OMS 2021 : PM2.5 = 15 µg/m³ (24h) et 5 µg/m³ (annuel). Référence sanitaire internationale.",
+        snNorm: "Norme Sénégalaise NS 05-062 de l'Association Sénégalaise de Normalisation (ASN) : cadre réglementaire contraignant des émissions et concentrations au Sénégal.",
+        cgqaFormula: "Formule officielle de l'indice IQA du CGQA : IQA = (C / C_limite) × 100.",
+        cgqaScale: [
+          { range: "IQA < 100", label: "Bon", action: "Qualité satisfaisante, aucune précaution requise" },
+          { range: "100 ≤ IQA < 150", label: "Moyen", action: "Risques limités pour les personnes sensibles (asthmatiques, enfants)" },
+          { range: "150 ≤ IQA ≤ 200", label: "Mauvais", action: "Effets sensibles, réduire les efforts physiques extérieurs" },
+          { range: "IQA > 200", label: "Très mauvais", action: "Déclenchement d'une alerte sanitaire, fermer les fenêtres" },
+          { range: "IQA > 300", label: "Alerte générale", action: "Mesures d'urgence des autorités publiques" },
+        ],
+      },
+    },
+  ],
+};

@@ -184,7 +184,7 @@ export default function ModelSection() {
         </div>
 
         <p className="text-[11px] text-ink-subtle pt-1">
-          <strong>Constat :</strong> Le passé immédiat de la station porte déjà l'essentiel du signal ; l'apport direct de l'AOD satellitaire à 24 h est marginal.
+          <strong>Validation théorique (Sayon Sidibé / Léon et al. 2020) :</strong> L'AOD satellitaire totale n'explique que 15 % de la variance au sol (R² = 0,15) au Sahel ; il faut impérativement intégrer la distribution verticale (CALIOP/Lidar) pour monter à R² = 0,75. À 24 h, les lags du capteur au sol dominent l'information.
         </p>
       </div>
 
@@ -198,7 +198,7 @@ export default function ModelSection() {
           >
             <span className="flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-terracotta" />
-              <span>Ce que le modèle ne sait pas faire (4 limites)</span>
+              <span>Ce que le modèle ne sait pas faire (5 limites documentées par Sayon)</span>
             </span>
             {limitsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
@@ -206,20 +206,24 @@ export default function ModelSection() {
           {limitsOpen && (
             <div className="space-y-2 mt-3 pt-2 text-xs text-ink-muted">
               <div className="p-2.5 bg-sand-surface rounded-[10px] space-y-0.5">
-                <strong className="text-ink block">1. Satellite ≠ Sol :</strong>
-                <span>Le satellite mesure une colonne optique en altitude non respirée au sol.</span>
+                <strong className="text-ink block">1. AOD Colonne totale ≠ Sol respiré :</strong>
+                <span>Le satellite intègre toute l'atmosphère (poussières sahariennes transitant à 3 000 m). Sans lidar vertical (CALIOP), l'AOD ne reflète pas l'air au sol (Léon et al. 2020).</span>
               </div>
               <div className="p-2.5 bg-sand-surface rounded-[10px] space-y-0.5">
-                <strong className="text-ink block">2. Biais d'humidité (&gt; 80 %) :</strong>
-                <span>Le gonflement hygroscopique fausse les micro-capteurs optiques côtiers.</span>
+                <strong className="text-ink block">2. Biais d'humidité (&gt; 80 %) et couverture nuageuse :</strong>
+                <span>Le gonflement hygroscopique fausse les micro-capteurs optiques côtiers, et les nuages bloquent les capteurs optiques satellitaires en saison des pluies (hivernage).</span>
               </div>
               <div className="p-2.5 bg-sand-surface rounded-[10px] space-y-0.5">
-                <strong className="text-ink block">3. Tempêtes d'Harmattan soudaines :</strong>
-                <span>Les pics violents (&gt; 150 µg) sont statistiquement lissés par les algorithmes.</span>
+                <strong className="text-ink block">3. Résolution spatiale (pixel grossier) :</strong>
+                <span>Un pixel satellite (7×3,5 km ou 10×10 km) moyenne toute une commune et ne distingue pas les axes routiers saturés, les zones industrielles et le littoral.</span>
               </div>
               <div className="p-2.5 bg-sand-surface rounded-[10px] space-y-0.5">
-                <strong className="text-ink block">4. R² de 0,931 non promis :</strong>
-                <span>Ce score de l'étude de référence exige des stations continues non disponibles.</span>
+                <strong className="text-ink block">4. Résolution temporelle (passage 1x/jour) :</strong>
+                <span>Les satellites en orbite héliosynchrone ratent le cycle diurne (pic du matin à 8h et du soir à 20h). Seul un réseau sol continu capture ces variations.</span>
+              </div>
+              <div className="p-2.5 bg-sand-surface rounded-[10px] space-y-0.5">
+                <strong className="text-ink block">5. Tempêtes d'Harmattan et lissage extrême :</strong>
+                <span>Les bouffées aiguës (&gt; 150 µg/m³) sont statistiquement atténuées par les fonctions de perte quadratique (RMSE/MSE) des algorithmes d'apprentissage.</span>
               </div>
             </div>
           )}
@@ -233,7 +237,7 @@ export default function ModelSection() {
           >
             <span className="flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-terracotta" />
-              <span>Références bibliographiques (Alioune B. Sarr)</span>
+              <span>Références scientifiques complètes (Sayon Sidibé & Alioune B. Sarr)</span>
             </span>
             {refsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>

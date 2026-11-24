@@ -165,6 +165,64 @@ export default function StationsSection() {
           />
         </div>
       </div>
+
+      {/* ── 4. Cadre réglementaire & Calcul de l'IQA (Recherches Sayon Sidibé) ── */}
+      <div className="dash-card space-y-3 p-4 sm:p-6">
+        <div className="flex items-center justify-between pb-2 border-b border-sand-line/60">
+          <div className="flex items-center gap-2">
+            <Radio className="w-4 h-4 text-terracotta" />
+            <h3 className="font-serif text-sm font-normal text-ink">
+              Cadre réglementaire sénégalais (NS 05-062) & Indice IQA
+            </h3>
+          </div>
+          <span className="text-[10px] bg-[#EAF3ED] text-[#24613B] font-medium px-2 py-0.5 rounded-full border border-[#3F7D58]/30">
+            Sayon Sidibé
+          </span>
+        </div>
+
+        <p className="text-xs text-ink-muted leading-relaxed">
+          Le Centre de Gestion de la Qualité de l'Air (CGQA) applique la formule officielle rapportant la concentration mesurée à la limite réglementaire :
+        </p>
+
+        <div className="p-3 bg-sand-surface rounded-[12px] border border-sand-line font-mono text-center text-xs text-ink">
+          <span className="text-terracotta font-bold">IQA</span> = ( C<sub>mesurée</sub> / C<sub>limite</sub> ) × 100
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs pt-1">
+          <div className="p-2 bg-white rounded-[10px] border border-sand-line space-y-0.5">
+            <div className="font-medium text-[#24613B] flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-[#3F7D58]" /> Bon
+            </div>
+            <div className="text-[10px] text-ink-subtle">IQA &lt; 100</div>
+            <div className="text-[10px] text-ink-muted">Air satisfaisant</div>
+          </div>
+          <div className="p-2 bg-white rounded-[10px] border border-sand-line space-y-0.5">
+            <div className="font-medium text-ochre flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-[#C99A1E]" /> Moyen
+            </div>
+            <div className="text-[10px] text-ink-subtle">100 ≤ IQA &lt; 150</div>
+            <div className="text-[10px] text-ink-muted">Modérer l'effort prolongé</div>
+          </div>
+          <div className="p-2 bg-white rounded-[10px] border border-sand-line space-y-0.5">
+            <div className="font-medium text-terracotta flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-[#D2691E]" /> Mauvais
+            </div>
+            <div className="text-[10px] text-ink-subtle">150 ≤ IQA ≤ 200</div>
+            <div className="text-[10px] text-ink-muted">Sensibilité accrue</div>
+          </div>
+          <div className="p-2 bg-white rounded-[10px] border border-sand-line space-y-0.5">
+            <div className="font-medium text-[#A8372C] flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-[#A8372C]" /> Très mauvais
+            </div>
+            <div className="text-[10px] text-ink-subtle">IQA &gt; 200</div>
+            <div className="text-[10px] text-ink-muted">Alerte sanitaire (&gt;300 urgence)</div>
+          </div>
+        </div>
+
+        <p className="text-[11px] text-ink-subtle leading-relaxed pt-1">
+          <strong>Distinction méthodologique (Sayon Sidibé) :</strong> La recommandation OMS (15 µg/m³ sur 24h) sert de repère sanitaire international, tandis que l'indice du CGQA et la norme NS 05-062 constituent le cadre réglementaire d'alerte des populations à Dakar.
+        </p>
+      </div>
     </section>
   );
 }

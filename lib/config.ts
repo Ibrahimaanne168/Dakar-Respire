@@ -97,6 +97,48 @@ export const ALIOUNE_FACTS = {
   },
   references: [
     {
+      authors: "Sow, B., Tchanche, B., Fall, I., Souaré, S., & Mbow-Diokhané, A.",
+      title: "Monitoring of Atmospheric Pollutant Concentrations in the City of Dakar, Senegal",
+      journal: "Open Journal of Air Pollution, 10, 18-30 (2021)",
+      note: "Données CGQA : PM10 (120-180 µg/m³) et PM2.5 (25-48 µg/m³). Fort contraste saison sèche (nov-mai) vs pluies (juin-oct). DOI: 10.4236/ojap.2021.101002.",
+    },
+    {
+      authors: "Gueye, A., et al.",
+      title: "On the Application of Long Short-Term Memory Neural Network for Daily Forecasting of PM2.5 in Dakar, Senegal",
+      journal: "Sustainability, 17(12), 5421 (2025)",
+      note: "Benchmark académique Dakar (station Bel Air sur 4 ans) : LSTM atteint RMSE = 3,2 µg/m³ vs ARIMA = 6,8 µg/m³. Prévision jusqu'à J+7. DOI: 10.3390/su17125421.",
+    },
+    {
+      authors: "Léon, J.-F., Martiny, N., & Merlet, S.",
+      title: "A Multi Linear Regression Model to Derive Dust PM10 in the Sahel Using AERONET AOD and CALIOP Products",
+      journal: "Remote Sensing, 12(18), 3099 (2020)",
+      note: "Sites de M'Bour (Sénégal), Banizoumbou et Cinzana : l'AOD satellitaire seule n'explique que R² = 0,15 au sol ; l'ajout du profil vertical CALIOP élève le R² à 0,75. DOI: 10.3390/rs12183099.",
+    },
+    {
+      authors: "Toure, N. O., et al.",
+      title: "Observed and Modeled Seasonal Air Quality and Respiratory Health in Senegal During 2015 and 2016",
+      journal: "GeoHealth, 3(12), 423-442 (2019)",
+      note: "Couplage mesures sol, satellite et modèle WRF. Poussières de décembre à février et impact sanitaire respiratoire. DOI: 10.1029/2019GH000214.",
+    },
+    {
+      authors: "Source Apportionment Dakar & Bamako",
+      title: "Source Apportionment of Ambient Particulate Matter in Two Western African Urban Sites",
+      journal: "Atmosphere, 14(4), 684 (2023)",
+      note: "Analyses PCA et PMF pour différencier le trafic routier, les poussières minérales et les émissions locales.",
+    },
+    {
+      authors: "Organisation mondiale de la Santé (OMS)",
+      title: "WHO Global Air Quality Guidelines (Lignes directrices mondiales)",
+      journal: "Rapport OMS 2021",
+      note: "Seuils sanitaires de référence : PM2.5 = 15 µg/m³ (24h) et 5 µg/m³ (annuel) ; PM10 = 45 µg/m³ (24h) et 15 µg/m³ (annuel).",
+    },
+    {
+      authors: "Association Sénégalaise de Normalisation (ASN) & CGQA",
+      title: "Norme sénégalaise NS 05-062 sur la pollution atmosphérique & Formule IQA",
+      journal: "Référence réglementaire nationale",
+      note: "Formule officielle IQA = (C / C_limite) × 100. Seuils : <100 Bon, 100-150 Moyen, 150-200 Mauvais, >200 Très Mauvais, >300 Alerte d'urgence.",
+    },
+    {
       authors: "Étude POLCA",
       title: "Pollution des capitales africaines (Bamako et Dakar)",
       journal: "Atmosphere, 2023",
@@ -191,8 +233,8 @@ export const TEAM_MEMBERS = [
   },
   {
     name: "Sayon Sidibé",
-    role: "Recherche scientifique, seuils réglementaires et bibliographie",
-    status: "À venir (fichier de configuration et références)",
-    fileTarget: "lib/sayon_config.json",
+    role: "Recherche scientifique, seuils réglementaires (CGQA / OMS) et bibliographie",
+    status: "Reçu (Documenté & Validé)",
+    fileTarget: "donnees/RECHERCHE SCIENTIFIQUE COMPLEMENTAIRE.docx",
   },
 ];

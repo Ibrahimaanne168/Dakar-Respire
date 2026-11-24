@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { COVERAGE_TIMELINE, SOURCES_STATE_TABLE } from "@/lib/dashboardData";
+import { COVERAGE_TIMELINE, SOURCES_STATE_TABLE, SAYON_RESEARCH_CONTENT } from "@/lib/dashboardData";
 import { runInBrowserInference, PredictionResult } from "@/lib/clientPredictor";
 import DataMetadata from "@/components/DataMetadata";
 import StatusBadge from "@/components/StatusBadge";
 import BottomSheet from "@/components/BottomSheet";
-import { UploadCloud, FileText, AlertTriangle, CheckCircle, HelpCircle, Database } from "lucide-react";
+import { UploadCloud, FileText, AlertTriangle, CheckCircle, HelpCircle, Database, BookOpen, ExternalLink } from "lucide-react";
 
 export default function DataSection() {
   const [fileName, setFileName] = useState<string>("");
@@ -15,6 +15,7 @@ export default function DataSection() {
   const [report, setReport] = useState<any>(null);
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [formatSheetOpen, setFormatSheetOpen] = useState<boolean>(false);
+  const [sayonSheetOpen, setSayonSheetOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("dakarrespire:v1:custom_prediction");
@@ -165,24 +166,45 @@ export default function DataSection() {
         </div>
 
         <div className="space-y-2">
-          {SOURCES_STATE_TABLE.map((row, i) => (
-            <div
-              key={i}
-              className="p-3 bg-white rounded-[12px] border border-sand-line text-xs space-y-1"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-medium text-ink">{row.source}</span>
-                <StatusBadge status={row.statusType} size="sm" />
+          {SOURCES_STATE_TABLE.map((row, i) => {
+            const isSayon = row.responsible.includes("Sayon");
+            return (
+              <div
+                key={i}
+                className={`p-3 rounded-[12px] border text-xs space-y-1.5 transition-colors ${
+                  isSayon ? "bg-[#EAF3ED]/60 border-[#3F7D58]/40" : "bg-white border-sand-line"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-medium text-ink flex items-center gap-1.5">
+                    {row.source}
+                    {isSayon && (
+                      <span className="text-[10px] bg-[#3F7D58] text-white px-1.5 py-0.2 rounded-full font-medium">
+                        Nouveau
+                      </span>
+                    )}
+                  </span>
+                  <StatusBadge status={row.statusType} size="sm" />
+                </div>
+                <div className="flex items-center justify-between text-[11px] text-ink-subtle">
+                  <span>Responsable : {row.responsible}</span>
+                  <span className="tabular-nums">{row.coverage}</span>
+                </div>
+                <p className="text-[11px] text-ink-muted pt-1 border-t border-sand-line/40 leading-relaxed">
+                  {row.comment}
+                </p>
+                {isSayon && (
+                  <button
+                    onClick={() => setSayonSheetOpen(true)}
+                    className="touch-target w-full mt-1.5 py-1.5 px-3 bg-[#3F7D58] text-white rounded-[8px] font-medium text-xs flex items-center justify-center gap-1.5 shadow-xs hover:bg-[#2E5E41] active:scale-[0.99] transition-all"
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    <span>Consulter l'étude de Sayon Sidibé (4 parties)</span>
+                  </button>
+                )}
               </div>
-              <div className="flex items-center justify-between text-[11px] text-ink-subtle">
-                <span>Responsable : {row.responsible}</span>
-                <span className="tabular-nums">{row.coverage}</span>
-              </div>
-              <p className="text-[11px] text-ink-muted pt-1 border-t border-sand-line/40 leading-relaxed">
-                {row.comment}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -269,6 +291,109 @@ export default function DataSection() {
           <p className="text-[11px] text-ink-subtle">
             Le fichier est analysé à 100% dans votre navigateur sans être envoyé sur un serveur tiers.
           </p>
+        </div>
+      </BottomSheet>
+
+      {/* Bottom Sheet pour la Recherche Scientifique Complémentaire de Sayon Sidibé */}
+      <BottomSheet
+        isOpen={sayonSheetOpen}
+        onClose={() => setSayonSheetOpen(false)}
+        title="Recherche scientifique — Sayon Sidibé"
+      >
+        <div className="space-y-4 text-xs text-ink leading-relaxed">
+          <div className="p-2.5 bg-[#EAF3ED] border border-[#3F7D58]/30 rounded-[10px] space-y-1">
+            <div className="font-medium text-[#24613B] flex items-center justify-between">
+              <span>Document officiel de l'équipe</span>
+              <span className="text-[10px]">{SAYON_RESEARCH_CONTENT.date}</span>
+            </div>
+            <p className="text-[11px] text-ink-muted">
+              Source : <code className="font-mono text-ink">{SAYON_RESEARCH_CONTENT.document}</code>
+            </p>
+          </div>
+
+          {/* 4 Parties de Sayon */}
+          {SAYON_RESEARCH_CONTENT.parts.map((part) => (
+            <div key={part.id} className="p-3 bg-sand-surface rounded-[12px] border border-sand-line/70 space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-ink text-white font-medium">
+                  {part.number}
+                </span>
+                <strong className="text-sm font-serif font-normal text-ink">{part.title}</strong>
+              </div>
+
+              {/* Partie I : Études */}
+              {"studies" in part && part.studies && (
+                <div className="space-y-2 pt-1">
+                  {part.studies.map((st, sIdx) => (
+                    <div key={sIdx} className="p-2 bg-white rounded-[8px] border border-sand-line/50 space-y-1">
+                      <div className="font-medium text-ink">{st.title}</div>
+                      <div className="text-[10px] text-terracotta">{st.citation}</div>
+                      <p className="text-[11px] text-ink-muted">{st.findings}</p>
+                      <div className="text-[10px] text-[#24613B] bg-[#EAF3ED]/60 p-1 rounded">
+                        <strong>Apport projet :</strong> {st.takeaway}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Partie II : Méthodes de prédiction */}
+              {"methodsComparison" in part && part.methodsComparison && (
+                <div className="space-y-2 pt-1">
+                  <div className="p-2 bg-white rounded-[8px] border border-sand-line/50 space-y-1">
+                    <strong className="text-ink block">Synthèse comparative des 6 méthodes :</strong>
+                    <div className="divide-y divide-sand-line/40 text-[11px]">
+                      {part.methodsComparison.map((m, mIdx) => (
+                        <div key={mIdx} className="py-1 flex justify-between gap-2">
+                          <span className="font-medium text-ink w-1/3">{m.method} ({m.type})</span>
+                          <span className="text-ink-muted flex-1">{m.usage} · <em>{m.limit}</em></span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  {part.keyStudy && (
+                    <div className="p-2 bg-[#EAF3ED] border border-[#3F7D58]/30 rounded-[8px] text-[11px] text-[#24613B]">
+                      <strong>Étude clé à Dakar (Gueye et al. 2025) :</strong> {part.keyStudy}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Partie III : Limites du satellite */}
+              {"limits" in part && part.limits && (
+                <div className="space-y-1.5 pt-1">
+                  {part.limits.map((l, lIdx) => (
+                    <div key={lIdx} className="p-2 bg-white rounded-[8px] border border-sand-line/50 space-y-0.5">
+                      <strong className="text-ink block text-[11px]">{l.point}</strong>
+                      <p className="text-[11px] text-ink-muted">{l.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Partie IV : Seuils & Normes */}
+              {"standards" in part && part.standards && (
+                <div className="space-y-2 pt-1 text-[11px]">
+                  <div className="p-2 bg-white rounded-[8px] border border-sand-line/50 space-y-1">
+                    <div><strong>OMS 2021 :</strong> {part.standards.who2021}</div>
+                    <div><strong>Norme SN 05-062 :</strong> {part.standards.snNorm}</div>
+                    <div className="font-mono text-terracotta pt-0.5"><strong>Formule CGQA :</strong> {part.standards.cgqaFormula}</div>
+                  </div>
+                  <div className="p-2 bg-white rounded-[8px] border border-sand-line/50 space-y-1">
+                    <strong className="block text-ink">Grille officielle d'alerte du CGQA :</strong>
+                    <div className="divide-y divide-sand-line/40">
+                      {part.standards.cgqaScale.map((sc, scIdx) => (
+                        <div key={scIdx} className="py-1 flex justify-between items-center gap-2">
+                          <span className="font-medium text-ink w-28">{sc.range} ({sc.label})</span>
+                          <span className="text-ink-subtle flex-1">{sc.action}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </BottomSheet>
     </section>
