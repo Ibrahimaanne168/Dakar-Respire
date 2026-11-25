@@ -165,22 +165,35 @@ export const ALIOUNE_FACTS = {
   ],
 };
 
-// Profil horaire documenté par Mously Sow
+// Profil horaire documenté et mesuré par Mously Sow (17 897 heures analysées)
 export const MOUSLY_FINDINGS = {
   stations: [
     {
       name: "Complexe Scolaire Limamoulaye",
-      location: "Grand Dakar",
-      device: "AirGradient Open Air",
-      license: "CC BY 4.0 (via OpenAQ & kaikai.dev)",
-      diurnalTrend: "Médiane d'environ 4 µg/m³ vers 3 h-4 h du matin, pic à environ 18 µg/m³ vers 20 h.",
+      location: "Grand Dakar (centre)",
+      device: "AirGradient Open Air (optique)",
+      license: "CC BY 4.0 (OpenAQ / kaikai.dev)",
+      count: "5 975 heures",
+      period: "17/11/2025 – 01/11/2026",
+      diurnalTrend: "Médiane globale 11,1 µg/m³. Creux à 3,9 µg/m³ à 5h, pic de soirée à 18,7 µg/m³ à 21h.",
     },
     {
       name: "Mairie Tivaoune Diacksao",
-      location: "Tiaroye",
-      device: "AirGradient Open Air",
-      license: "CC BY 4.0 (via OpenAQ)",
-      diurnalTrend: "Médiane d'environ 15 µg/m³ vers 20 h en fin décembre 2025.",
+      location: "Tiaroye (Pikine, banlieue)",
+      device: "AirGradient Open Air (optique)",
+      license: "CC BY 4.0 (OpenAQ / kaikai.dev)",
+      count: "5 353 heures",
+      period: "16/12/2025 – 22/11/2026",
+      diurnalTrend: "Médiane globale 15,6 µg/m³. Creux à 8,8 µg/m³ à 4h, pic du matin à 23,2 µg/m³ à 9h et pic du soir à 19,1 µg/m³.",
+    },
+    {
+      name: "ESMT Dakar",
+      location: "Grand Dakar (proche Limamoulaye)",
+      device: "AirGradient Open Air Gen 1 (optique)",
+      license: "CC BY 4.0 (OpenAQ / kaikai.dev)",
+      count: "6 569 heures",
+      period: "15/10/2025 – 22/11/2026",
+      diurnalTrend: "Médiane globale 9,7 µg/m³. Creux à 4,4 µg/m³ à 5h, pic du matin à 16,3 µg/m³ à 8h et pic du soir à 16,0 µg/m³ à 21h.",
     },
   ],
   discrepancyExample2026: {
@@ -190,7 +203,7 @@ export const MOUSLY_FINDINGS = {
     limamoulayeMedian: "environ 15 µg/m³",
     reason: "Différence de méthode : modèles satellitaires globaux interpolés (IQAir / World Air Map) versus capteur optique de surface in situ (Limamoulaye).",
   },
-  referenceTarget: "Ambassade des États-Unis (AirNow) — station de référence à télécharger en priorité.",
+  referenceTarget: "Ambassade des États-Unis (AirNow) — station introuvable sur la carte en 2026, validation croisée inter-capteurs retenue.",
 };
 
 // Répartition des 7 membres de l'équipe (DOC-20261115-WA0029.pdf)
@@ -210,8 +223,8 @@ export const TEAM_MEMBERS = [
   {
     name: "Mously Sow",
     role: "Mesures réelles de stations au sol (OpenAQ, AirNow, CGQA)",
-    status: "Rapport reçu (séries brutes en attente)",
-    fileTarget: "data/raw/openaq_limamoulaye.csv",
+    status: "Reçu (17 897 mesures nettoyées sur 3 stations)",
+    fileTarget: "donnees/mesures_pm25.xlsx",
   },
   {
     name: "Lamine Cissé",
@@ -228,7 +241,7 @@ export const TEAM_MEMBERS = [
   {
     name: "Papa Ibrahima Samb",
     role: "Consolidation, nettoyage et production du fichier propre final",
-    status: "À venir (emplacement prêt : donnees_propres.csv)",
+    status: "Reçu (donnees_propres.csv consolidé avec météo 2025–2026)",
     fileTarget: "donnees/donnees_propres.csv",
   },
   {
