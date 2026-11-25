@@ -206,6 +206,35 @@ export const MOUSLY_FINDINGS = {
   referenceTarget: "Ambassade des États-Unis (AirNow) — station introuvable sur la carte en 2026, validation croisée inter-capteurs retenue.",
 };
 
+// Synthèse des données satellitaires Sentinel-5P TROPOMI (Lamine Cissé)
+export const LAMINE_SATELLITE_FINDINGS = {
+  platform: "Copernicus Sentinel-5P (Agence Spatiale Européenne / CDSE)",
+  sensor: "TROPOMI (TROPOspheric Monitoring Instrument)",
+  spatialResolution: "5.5 km × 3.5 km",
+  dateReceived: "25/11/2026",
+  products: {
+    no2: {
+      title: "Dioxyde d'azote troposphérique (NO2)",
+      description: "Traceur anthropique direct de la combustion fossile (échappements diesel du parc automobile dakarois, centrale thermique de Bel-Air, activités portuaires).",
+      coverage: "Sénégal & Presqu'île de Dakar [14.50°N, −14.65°O]",
+      highResImage: "/satellite/sentinel5p_no2_dakar_20261125.webp",
+      thumbImage: "/satellite/sentinel5p_no2_thumb.webp",
+    },
+    aerAi: {
+      title: "Indice d'aérosols UV (Aerosol Index 340/380 nm)",
+      description: "Détection des particules absorbantes en altitude (poussières minérales du Sahara transportées par l'Harmattan). Visualise la masse d'aérosols avant son dépôt au sol.",
+      coverage: "Dakar [14.63°N, −17.24°O, Zoom 10] & Afrique de l'Ouest",
+      timelapseVideo: "/satellite/sentinel5p_aer_ai_timelapse.mp4",
+    },
+  },
+  technicalAudit: {
+    requestsCount: 52,
+    processingUnits: 302,
+    netcdfGranules: 3,
+    note: "L'acquisition spatiale a été exploitée via l'API CDSE Process/WMS par Lamine Cissé avec un ciblage précis sur la presqu'île du Cap-Vert le 23 et 25 novembre 2026.",
+  },
+};
+
 // Répartition des 7 membres de l'équipe (DOC-20261115-WA0029.pdf)
 export const TEAM_MEMBERS = [
   {
@@ -228,9 +257,9 @@ export const TEAM_MEMBERS = [
   },
   {
     name: "Lamine Cissé",
-    role: "Données satellitaires (Copernicus CAMS, Sentinel-5P TROPOMI)",
-    status: "Sources documentées (fichiers NetCDF en attente)",
-    fileTarget: "data/raw/cams_aod_dakar.csv",
+    role: "Données satellitaires (Copernicus CDSE, Sentinel-5P TROPOMI NO2 & AER_AI)",
+    status: "Reçu (Imagerie Sentinel-5P TROPOMI, NO2 & Timelapse Aérosols 23–25/11/2026)",
+    fileTarget: "public/satellite/sentinel5p_no2_dakar_20261125.webp",
   },
   {
     name: "El Hadji Ibrahima Diop Sow",

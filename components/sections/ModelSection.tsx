@@ -186,6 +186,19 @@ export default function ModelSection() {
         <p className="text-[11px] text-ink-subtle pt-1">
           <strong>Validation théorique (Sayon Sidibé / Léon et al. 2020) :</strong> L'AOD satellitaire totale n'explique que 15 % de la variance au sol (R² = 0,15) au Sahel ; il faut impérativement intégrer la distribution verticale (CALIOP/Lidar) pour monter à R² = 0,75. À 24 h, les lags du capteur au sol dominent l'information.
         </p>
+
+        {/* Note observationnelle Sentinel-5P Lamine Cissé */}
+        <div className="p-2.5 bg-[#EBF2F7] border border-[#2A6F97]/30 rounded-[10px] space-y-1 text-[11px]">
+          <div className="flex items-center justify-between text-[#1E5270] font-medium">
+            <span>Observation Sentinel-5P TROPOMI (Lamine Cissé, 25/11/2026)</span>
+            <span className="text-[10px] bg-white px-1.5 py-0.2 rounded border border-[#2A6F97]/30 font-semibold">
+              Données reçues
+            </span>
+          </div>
+          <p className="text-ink-muted">
+            L'imagerie TROPOMI (NO2 & AER_AI) confirme l'apport décisif du satellite pour repérer l'arrivée des tempêtes de poussière sahariennes (timelapse en mer et sur la côte), tout en illustrant la nécessité de coupler l'information avec les séries horaires au sol (Mously Sow) pour capter les deux pics journaliers de pollution urbaine.
+          </p>
+        </div>
       </div>
 
       {/* ── 4. Limites et références en ACCORDÉONS repliables au toucher ── */}

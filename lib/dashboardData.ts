@@ -298,15 +298,15 @@ export const COVERAGE_TIMELINE: SourceCoverage[] = [
     statusText: "Série continue météo NASA + stations sol synchronisées",
   },
   {
-    source: "Satellites CAMS & Sentinel-5P (Lamine)",
-    start: "Attente",
-    end: "Attente",
-    startPct: 75,
-    widthPct: 25,
-    periodLabel: "À venir",
-    frequency: "3h / Journalier",
-    status: "À venir",
-    statusText: "Plateformes identifiées, téléchargement en attente",
+    source: "Sentinel-5P TROPOMI NO2 & AER_AI (Lamine)",
+    start: "23/11/2026",
+    end: "25/11/2026",
+    startPct: 92,
+    widthPct: 8,
+    periodLabel: "23/11/2026 – 25/11/2026",
+    frequency: "Passage quotidien",
+    status: "Mesuré",
+    statusText: "Acquisition Sentinel-5P TROPOMI (Copernicus CDSE) : carte NO2 haute résolution (9930×6865) et timelapse AER_AI",
   },
   {
     source: "Ambassade USA BAM-1022 (Mously)",
@@ -361,13 +361,13 @@ export const SOURCES_STATE_TABLE: SourceState[] = [
     comment: "Reçu (25/11/2026) : 17 897 mesures sur 3 stations (ESMT, Limamoulaye, Tivaoune). Fichier nettoyé, zéros anormaux traités et profils horaires validés.",
   },
   {
-    source: "Données satellitaires (CAMS AOD, Sentinel-5P)",
+    source: "Données satellitaires Sentinel-5P (Copernicus CDSE)",
     responsible: "Lamine Cissé",
-    coverage: "Emprise Dakar [14.55°–14.85°N, −17.55°–−17.10°O]",
-    timeStep: "3h / Quotidien",
-    status: "Partiel",
-    statusType: "Modèle",
-    comment: "Sources identifiées (ADS Copernicus & CDSE). Scripts d'extraction prêts.",
+    coverage: "Dakar & Sénégal (23–25/11/2026)",
+    timeStep: "Passage quotidien (TROPOMI)",
+    status: "Reçu",
+    statusType: "Mesuré",
+    comment: "Reçu (25/11/2026) : Imagerie Sentinel-5P TROPOMI NO2 haute résolution (9 930 × 6 865 px) et timelapse d'indice d'aérosol AER_AI. Visualisation du panache anthropique urbain et du transport de poussières sahariennes.",
   },
   {
     source: "Fichier propre final consolidé (donnees_propres.csv)",
@@ -608,6 +608,68 @@ export const SAYON_RESEARCH_CONTENT = {
           { range: "IQA > 300", label: "Alerte générale", action: "Mesures d'urgence des autorités publiques" },
         ],
       },
+    },
+  ],
+};
+
+// ==============================================================================
+// DONNÉES SATELLITAIRES DE LAMINE CISSÉ (Sentinel-5P TROPOMI / Copernicus CDSE)
+// ==============================================================================
+export const LAMINE_SATELLITE_CONTENT = {
+  author: "Lamine Cissé",
+  title: "Observation spatiale Sentinel-5P TROPOMI — Dioxyde d'Azote & Indice d'Aérosols",
+  date: "25 novembre 2026",
+  source: "Copernicus Data Space Ecosystem (CDSE) / Sentinel Hub Browser",
+  sections: [
+    {
+      id: "no2_map",
+      title: "1. Carte Satellite Haute Définition : Panache de NO2 (Dioxyde d'Azote)",
+      lead: "Observation par le spectromètre TROPOMI du panache de dioxyde d'azote sur le Sénégal et la région dakaroise le 25 novembre 2026.",
+      image: "/satellite/sentinel5p_no2_dakar_20261125.webp",
+      thumb: "/satellite/sentinel5p_no2_thumb.webp",
+      originalResolution: "9 930 × 6 865 pixels (3,5 Mo)",
+      sensor: "Sentinel-5P TROPOMI (ESA / Copernicus)",
+      resolution: "5,5 km × 3,5 km",
+      keyPoints: [
+        "Traceur anthropique direct : Le NO2 est issu quasi-exclusivement de la combustion des carburants fossiles (diesel) et de la production d'électricité thermique.",
+        "Localisation des points chauds : Forte densité visible sur la presqu'île de Dakar (axe autoroutier, zone industrielle de Bel-Air, port autonome et carrefours de banlieue).",
+        "Complémentarité avec le rapport d'Alioune Badara Sarr : Confirme la prépondérance du secteur trafic (49 % des émissions primaires) identifié lors de la campagne 2009.",
+      ],
+    },
+    {
+      id: "aer_ai_timelapse",
+      title: "2. Animation Timelapse AER_AI : Dynamique des Aérosols & Harmattan",
+      lead: "Séquence temporelle de l'Indice d'Aérosol UV (AER_AI 340/380 nm) montrant le transport à grande échelle des poussières minérales désertiques vers l'océan Atlantique et Dakar.",
+      video: "/satellite/sentinel5p_aer_ai_timelapse.mp4",
+      sensor: "Sentinel-5P TROPOMI AER_AI",
+      period: "23 au 25 novembre 2026",
+      keyPoints: [
+        "Détection des particules absorbantes : L'indice AER_AI mesure l'absorption des UV par les poussières minérales sahariennes et la suie, même au-dessus des nuages et de l'océan.",
+        "Validation de la théorie de Sayon Sidibé : L'animation illustre parfaitement la descente des masses d'air chargées de poussières sahariennes sous l'effet des flux d'est (Harmattan).",
+        "Explication des pics mesurés par Mously Sow : Corrélation nette entre l'intensification de l'indice AER_AI en altitude et la hausse des concentrations PM2.5 mesurées au sol (ESMT, Limamoulaye, Tivaoune).",
+      ],
+    },
+    {
+      id: "transparency_audit",
+      title: "3. Transparence Scientifique & Diagnostic Technique des Données",
+      lead: "Analyse technique rigoureuse des données brutes et des flux traités fournis par Lamine Cissé.",
+      auditPoints: [
+        {
+          label: "Audit des fichiers NetCDF L2 bruts",
+          status: "Vérifié & documenté",
+          detail: "3 granules NetCDF L2 (S5P_NRTI_L2_NO2, orbites 47244, 47245, 47246) de 70 Mo chacun ont été analysés par script xarray/netCDF4. Ces segments d'orbite couvrent l'Eurasie et l'Atlantique Nord. L'orbite exacte au zénith de Dakar (17°O) passe à un horaire différent de la journée.",
+        },
+        {
+          label: "Requêtes Copernicus Dataspace (CDSE)",
+          status: "52 requêtes / 302 Processing Units",
+          detail: "Lamine Cissé a ciblé directement la presqu'île de Dakar et le Sénégal via l'API CDSE Process et le Browser Sentinel Hub (pins 14.63°N, −17.24°O pour AER_AI et 14.50°N, −14.65°O pour NO2), permettant d'extraire l'imagerie composite haute résolution sans perte d'information spatiale.",
+        },
+        {
+          label: "Apport dans le modèle prédictif",
+          status: "Complémentarité Sol/Espace",
+          detail: "L'AOD et le NO2 satellitaires apportent le contexte macroscopique régional (fronts de poussière, panaches régionaux), tandis que les 3 micro-capteurs au sol de Mously Sow fournissent la précision temporelle horaire indispensable pour capter les cycles de pointe quotidiens.",
+        },
+      ],
     },
   ],
 };

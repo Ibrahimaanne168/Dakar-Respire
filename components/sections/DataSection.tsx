@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { COVERAGE_TIMELINE, SOURCES_STATE_TABLE, SAYON_RESEARCH_CONTENT } from "@/lib/dashboardData";
+import { COVERAGE_TIMELINE, SOURCES_STATE_TABLE, SAYON_RESEARCH_CONTENT, LAMINE_SATELLITE_CONTENT } from "@/lib/dashboardData";
 import { runInBrowserInference, PredictionResult } from "@/lib/clientPredictor";
 import DataMetadata from "@/components/DataMetadata";
 import StatusBadge from "@/components/StatusBadge";
 import BottomSheet from "@/components/BottomSheet";
-import { UploadCloud, FileText, AlertTriangle, CheckCircle, HelpCircle, Database, BookOpen, ExternalLink } from "lucide-react";
+import { UploadCloud, FileText, AlertTriangle, CheckCircle, HelpCircle, Database, BookOpen, ExternalLink, Globe } from "lucide-react";
 
 export default function DataSection() {
   const [fileName, setFileName] = useState<string>("");
@@ -16,6 +16,7 @@ export default function DataSection() {
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
   const [formatSheetOpen, setFormatSheetOpen] = useState<boolean>(false);
   const [sayonSheetOpen, setSayonSheetOpen] = useState<boolean>(false);
+  const [lamineSheetOpen, setLamineSheetOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("dakarrespire:v1:custom_prediction");
@@ -168,11 +169,16 @@ export default function DataSection() {
         <div className="space-y-2">
           {SOURCES_STATE_TABLE.map((row, i) => {
             const isSayon = row.responsible.includes("Sayon");
+            const isLamine = row.responsible.includes("Lamine");
             return (
               <div
                 key={i}
                 className={`p-3 rounded-[12px] border text-xs space-y-1.5 transition-colors ${
-                  isSayon ? "bg-[#EAF3ED]/60 border-[#3F7D58]/40" : "bg-white border-sand-line"
+                  isSayon
+                    ? "bg-[#EAF3ED]/60 border-[#3F7D58]/40"
+                    : isLamine
+                    ? "bg-[#EBF2F7]/70 border-[#2A6F97]/40"
+                    : "bg-white border-sand-line"
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -181,6 +187,11 @@ export default function DataSection() {
                     {isSayon && (
                       <span className="text-[10px] bg-[#3F7D58] text-white px-1.5 py-0.2 rounded-full font-medium">
                         Nouveau
+                      </span>
+                    )}
+                    {isLamine && (
+                      <span className="text-[10px] bg-[#2A6F97] text-white px-1.5 py-0.2 rounded-full font-medium">
+                        Sentinel-5P
                       </span>
                     )}
                   </span>
@@ -200,6 +211,15 @@ export default function DataSection() {
                   >
                     <BookOpen className="w-3.5 h-3.5" />
                     <span>Consulter l'étude de Sayon Sidibé (4 parties)</span>
+                  </button>
+                )}
+                {isLamine && (
+                  <button
+                    onClick={() => setLamineSheetOpen(true)}
+                    className="touch-target w-full mt-1.5 py-1.5 px-3 bg-[#2A6F97] text-white rounded-[8px] font-medium text-xs flex items-center justify-center gap-1.5 shadow-xs hover:bg-[#1E5270] active:scale-[0.99] transition-all"
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    <span>Consulter les données Sentinel-5P de Lamine (Carte NO2 & Timelapse)</span>
                   </button>
                 )}
               </div>
@@ -394,6 +414,126 @@ export default function DataSection() {
               )}
             </div>
           ))}
+        </div>
+      </BottomSheet>
+
+      {/* ── BottomSheet Données Satellitaires Lamine Cissé ── */}
+      <BottomSheet
+        isOpen={lamineSheetOpen}
+        onClose={() => setLamineSheetOpen(false)}
+        title="Données Satellitaires Sentinel-5P — Lamine Cissé"
+      >
+        <div className="space-y-4 text-xs pb-4">
+          <div className="p-3 bg-[#EBF2F7] border border-[#2A6F97]/30 rounded-[12px] space-y-1">
+            <div className="flex items-center justify-between">
+              <strong className="text-sm font-serif text-[#1E5270]">
+                {LAMINE_SATELLITE_CONTENT.title}
+              </strong>
+              <StatusBadge status="Mesuré" size="sm" />
+            </div>
+            <p className="text-[11px] text-ink-muted leading-relaxed">
+              Acquisition Copernicus Data Space Ecosystem (CDSE) / Spectromètre TROPOMI en orbite héliosynchrone. Analyse combinée du panache de dioxyde d'azote urbain et du flux d'aérosols sahariens.
+            </p>
+          </div>
+
+          {/* Section 1 : Carte NO2 */}
+          <div className="p-3 bg-white border border-sand-line rounded-[12px] space-y-2.5">
+            <div className="flex items-center justify-between">
+              <h4 className="font-serif font-medium text-ink text-sm">
+                1. Carte Sentinel-5P NO2 (Dioxyde d'azote)
+              </h4>
+              <span className="text-[10px] bg-sand-surface px-2 py-0.5 rounded-full text-ink-subtle">
+                25/11/2026
+              </span>
+            </div>
+            <p className="text-[11px] text-ink-muted leading-relaxed">
+              {LAMINE_SATELLITE_CONTENT.sections[0].lead}
+            </p>
+
+            {/* Image satellite */}
+            <div className="relative rounded-[8px] overflow-hidden border border-sand-line bg-black/5">
+              <img
+                src={LAMINE_SATELLITE_CONTENT.sections[0].image}
+                alt="Carte Sentinel-5P NO2 Sénégal Dakar"
+                className="w-full h-auto object-cover max-h-72 rounded-[8px]"
+                loading="lazy"
+              />
+              <div className="p-2 bg-sand-surface/90 border-t border-sand-line flex items-center justify-between text-[10px] text-ink-subtle">
+                <span>Résolution native : {LAMINE_SATELLITE_CONTENT.sections[0].originalResolution}</span>
+                <span className="font-medium text-[#2A6F97]">TROPOMI S5P</span>
+              </div>
+            </div>
+
+            <ul className="space-y-1 pt-1">
+              {LAMINE_SATELLITE_CONTENT.sections[0].keyPoints.map((pt, idx) => (
+                <li key={idx} className="p-2 bg-sand-surface rounded-[8px] text-[11px] text-ink-muted">
+                  {pt}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Section 2 : Vidéo Timelapse AER_AI */}
+          <div className="p-3 bg-white border border-sand-line rounded-[12px] space-y-2.5">
+            <div className="flex items-center justify-between">
+              <h4 className="font-serif font-medium text-ink text-sm">
+                2. Timelapse Dynamique AER_AI (Indice d'aérosols UV)
+              </h4>
+              <span className="text-[10px] bg-sand-surface px-2 py-0.5 rounded-full text-ink-subtle">
+                23–25/11/2026
+              </span>
+            </div>
+            <p className="text-[11px] text-ink-muted leading-relaxed">
+              {LAMINE_SATELLITE_CONTENT.sections[1].lead}
+            </p>
+
+            {/* Lecteur vidéo */}
+            <div className="rounded-[8px] overflow-hidden border border-sand-line bg-black">
+              <video
+                src={LAMINE_SATELLITE_CONTENT.sections[1].video}
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-auto max-h-64 object-contain mx-auto"
+              >
+                Votre navigateur ne prend pas en charge la balise vidéo.
+              </video>
+              <div className="p-2 bg-sand-surface text-[10px] text-ink-subtle flex items-center justify-between">
+                <span>Animation du transport d'aérosols vers la côte dakaroise</span>
+                <span className="text-terracotta font-medium">Harmattan Saharien</span>
+              </div>
+            </div>
+
+            <ul className="space-y-1 pt-1">
+              {LAMINE_SATELLITE_CONTENT.sections[1].keyPoints.map((pt, idx) => (
+                <li key={idx} className="p-2 bg-sand-surface rounded-[8px] text-[11px] text-ink-muted">
+                  {pt}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Section 3 : Transparence & Audit technique */}
+          <div className="p-3 bg-[#FAF8F5] border border-sand-line rounded-[12px] space-y-2">
+            <h4 className="font-serif font-medium text-ink text-sm">
+              3. Transparence Scientifique & Traitement des Fichiers NetCDF
+            </h4>
+            <div className="space-y-1.5 pt-1">
+              {LAMINE_SATELLITE_CONTENT.sections[2].auditPoints?.map((ap, idx) => (
+                <div key={idx} className="p-2.5 bg-white rounded-[8px] border border-sand-line/60 space-y-0.5">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <strong className="text-ink">{ap.label}</strong>
+                    <span className="text-[10px] text-[#2A6F97] font-medium bg-[#EBF2F7] px-1.5 py-0.5 rounded">
+                      {ap.status}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-ink-muted leading-relaxed">{ap.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </BottomSheet>
     </section>

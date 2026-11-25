@@ -1,0 +1,143 @@
+[
+    {
+        "_id": "d94ac2d6-74b7-40c2-9b93-cf7ddf1fc8db-pin",
+        "title": "Sentinel-5P AER_AI: AER AI 340 and 380 (Atmosphère et pollution de l'air)",
+        "group": null,
+        "highResImageUrl": null,
+        "datasetId": "S5_AER_AI_CDAS",
+        "themeId": "ATMOSPHERE",
+        "layerId": "AER_AI_340_AND_380_VISUALIZED",
+        "lat": 14.5027227,
+        "lng": -14.656624400370479,
+        "zoom": 5,
+        "fromTime": "2026-11-25T00:00:00.000Z",
+        "toTime": "2026-11-25T23:59:59.999Z",
+        "visualizationUrl": "https://sh.dataspace.copernicus.eu/ogc/wms/0b0f5a61-f3d1-4c6e-8d11-4e58e2d454ef",
+        "evalscript": "",
+        "evalscriptUrl": "",
+        "dataFusion": [],
+        "tag": "v1.65.0",
+        "gain": 1,
+        "gamma": 1,
+        "redRange": [
+            0,
+            1
+        ],
+        "greenRange": [
+            0,
+            1
+        ],
+        "blueRange": [
+            0,
+            1
+        ],
+        "dateMode": "SINGLE",
+        "demSource3D": "MAPZEN",
+        "terrainViewerSettings": null,
+        "orbitDirection": null,
+        "cloudCoverage": 30,
+        "selectedProcessing": "Process API",
+        "processGraph": "",
+        "processGraphUrl": ""
+    },
+    {
+        "_id": "a4632725-4ded-431f-9d27-e179da0b1a0a-pin",
+        "title": "Sentinel-5P AER_AI: AER AI 340 and 380 (Défaut)",
+        "group": null,
+        "highResImageUrl": null,
+        "datasetId": "S5_AER_AI_CDAS",
+        "themeId": "DEFAULT-THEME",
+        "layerId": "AER_AI_340_AND_380_VISUALIZED",
+        "lat": 14.63076,
+        "lng": -17.2403,
+        "zoom": 10,
+        "fromTime": "2026-11-23T00:00:00.000Z",
+        "toTime": "2026-11-23T23:59:59.999Z",
+        "visualizationUrl": "https://sh.dataspace.copernicus.eu/ogc/wms/0b0f5a61-f3d1-4c6e-8d11-4e58e2d454ef",
+        "evalscript": "",
+        "evalscriptUrl": "",
+        "dataFusion": [],
+        "gain": 1,
+        "gamma": 1,
+        "redRange": [
+            0,
+            1
+        ],
+        "greenRange": [
+            0,
+            1
+        ],
+        "blueRange": [
+            0,
+            1
+        ],
+        "downsampling": null,
+        "selectedProcessing": "Process API",
+        "redCurve": null,
+        "speckleFilter": null,
+        "processGraph": "",
+        "greenCurve": null,
+        "orthorectification": null,
+        "externalWms": null,
+        "blueCurve": null,
+        "backscatterCoeff": null,
+        "id": 2606948,
+        "description": null,
+        "demSource3D": "MAPZEN",
+        "minQa": null,
+        "terrainViewerSettings": null,
+        "upsampling": null,
+        "orbitDirection": null,
+        "cloudCoverage": 30
+    },
+    {
+        "_id": "bef998ad-bb91-42e5-80c4-d8b91ae5dbc4-pin",
+        "title": "Sentinel-5P NO2: Nitrogen Dioxide (Défaut)",
+        "group": null,
+        "highResImageUrl": null,
+        "datasetId": "S5_NO2_CDAS",
+        "themeId": "DEFAULT-THEME",
+        "layerId": "NO2_VISUALIZED",
+        "lat": 14.5027227,
+        "lng": -14.656624400370479,
+        "zoom": 5,
+        "fromTime": "2026-11-25T00:00:00.000Z",
+        "toTime": "2026-11-25T23:59:59.999Z",
+        "visualizationUrl": "https://sh.dataspace.copernicus.eu/ogc/wms/0b0f5a61-f3d1-4c6e-8d11-4e58e2d454ef",
+        "evalscript": "",
+        "evalscriptUrl": "",
+        "dataFusion": [],
+        "gain": 1,
+        "gamma": 1,
+        "redRange": [
+            0,
+            1
+        ],
+        "greenRange": [
+            0,
+            1
+        ],
+        "blueRange": [
+            0,
+            1
+        ],
+        "downsampling": null,
+        "selectedProcessing": "Process API",
+        "redCurve": null,
+        "speckleFilter": null,
+        "processGraph": "",
+        "greenCurve": null,
+        "orthorectification": null,
+        "externalWms": null,
+        "blueCurve": null,
+        "backscatterCoeff": null,
+        "id": 2606949,
+        "description": null,
+        "demSource3D": "MAPZEN",
+        "minQa": null,
+        "terrainViewerSettings": null,
+        "upsampling": null,
+        "orbitDirection": null,
+        "cloudCoverage": 30
+    }
+]

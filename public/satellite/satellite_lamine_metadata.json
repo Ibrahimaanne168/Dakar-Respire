@@ -1,0 +1,35 @@
+{
+  "responsable": "Lamine Cissé",
+  "satellite": "Sentinel-5P TROPOMI (Copernicus)",
+  "fournisseur": "Copernicus Data Space Ecosystem (CDSE) / Sentinel Hub",
+  "date_acquisition": "2026-11-25",
+  "capteur": "TROPOMI (TROPOspheric Monitoring Instrument)",
+  "resolution_spatiale": "5.5 km × 3.5 km",
+  "produits": [
+    {
+      "code": "S5P_NO2",
+      "nom": "Dioxyde d'azote troposphérique (NO2)",
+      "description": "Traceur anthropique direct du trafic routier, des centrales thermiques et des activités industrielles.",
+      "emprise": "Sénégal & Presqu'île du Cap-Vert",
+      "date": "25 novembre 2026",
+      "image_web": "/satellite/sentinel5p_no2_dakar_20261125.webp",
+      "image_thumb": "/satellite/sentinel5p_no2_thumb.webp"
+    },
+    {
+      "code": "S5P_AER_AI",
+      "nom": "Indice d'aérosols UV (Aerosol Index 340/380 nm)",
+      "description": "Détection optique des particules absorbantes en altitude (poussières sahariennes transportées par l'Harmattan).",
+      "emprise": "Dakar [14.63°N, -17.24°O, Zoom 10] & Afrique de l'Ouest",
+      "date": "23-25 novembre 2026",
+      "video_timelapse": "/satellite/sentinel5p_aer_ai_timelapse.mp4"
+    }
+  ],
+  "diagnostic_netcdf": {
+    "fichiers_telecharges": [
+      "S5P_NRTI_L2_NO2_20261125T095052_20261125T095552_47244_03_030000.nc",
+      "S5P_NRTI_L2_NO2_20261125T113052_20261125T113552_47245_03_030000.nc",
+      "S5P_NRTI_L2_NO2_20261125T131552_20261125T132052_47246_03_030000.nc"
+    ],
+    "analyse_technique": "Les 3 granules NetCDF L2 bruts téléchargés correspondent aux trajectoires 47244-47246 (Eurasie/Atlantique Nord). L'acquisition sur Dakar a été visualisée et exportée directement via l'API CDSE Process/WMS par Lamine Cissé (52 requêtes enregistrées le 25/11/2026)."
+  }
+}
