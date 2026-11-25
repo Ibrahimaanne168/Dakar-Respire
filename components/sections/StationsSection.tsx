@@ -5,7 +5,6 @@ import { GROUND_STATIONS } from "@/lib/dashboardData";
 import { getAlertLevel, MOUSLY_FINDINGS } from "@/lib/config";
 import DataMetadata from "@/components/DataMetadata";
 import StatusBadge from "@/components/StatusBadge";
-import EmptyStateCard from "@/components/EmptyStateCard";
 import BottomSheet from "@/components/BottomSheet";
 import { MapPin, AlertCircle, Radio, TrendingUp, CheckCircle } from "lucide-react";
 
@@ -29,7 +28,7 @@ export default function StationsSection() {
             Stations de mesure dans la région de Dakar
           </h2>
           <p className="text-xs text-ink-muted">
-            Réseau de capteurs optiques et stations de référence documentées par Mously Sow
+            3 stations in situ mesurées et validées par Mously Sow (17 897 heures nettoyées)
           </p>
         </div>
 

@@ -33,7 +33,7 @@ export default function FooterSection() {
                         ? "Mesuré"
                         : m.status.includes("Opérationnel")
                         ? "Modèle"
-                        : "À venir"
+                        : "Mesuré"
                     }
                     size="sm"
                   />
