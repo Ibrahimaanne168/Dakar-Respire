@@ -112,15 +112,15 @@ export default function DataSection() {
           </p>
         </div>
 
-        {/* Note rouge sobre mise en valeur */}
-        <div className="p-3.5 rounded-[12px] bg-[#FDF0EC] border border-[#A8372C]/30 text-xs text-[#A8372C] flex items-start gap-2.5">
-          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+        {/* Note de synchronisation temporelle */}
+        <div className="p-3.5 rounded-[12px] bg-[#EAF3ED] border border-[#3F7D58]/30 text-xs text-[#24613B] flex items-start gap-2.5">
+          <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" />
           <div className="space-y-1">
             <strong className="block font-medium">
-              Aucune période commune entre la météo documentée et les PM2.5 mesurés
+              Synchronisation résolue : Météo NASA POWER (2025–2026) alignée sur OpenAQ
             </strong>
-            <p className="text-[11px] leading-relaxed text-[#A8372C]/90">
-              La météo s'arrête au 31/12/2024 et les capteurs au sol débutent le 17/11/2025. La démonstration utilise donc une réanalyse météo calibrée pour synchroniser l'ensemble.
+            <p className="text-[11px] leading-relaxed text-[#24613B]/90">
+              Les 16 584 heures météo d'El Hadji (01/01/2025 – 22/11/2026) couvrent désormais la même période que Limamoulaye et Tivaoune. Le profil météo 24 h affiché sur le site utilise les mesures réelles du 22/11/2026 (en attendant le CSV continu de PM2.5).
             </p>
           </div>
         </div>

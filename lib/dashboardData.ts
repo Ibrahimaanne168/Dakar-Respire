@@ -252,14 +252,14 @@ export interface SourceCoverage {
 export const COVERAGE_TIMELINE: SourceCoverage[] = [
   {
     source: "Météo NASA POWER (El Hadji)",
-    start: "01/01/2019",
-    end: "31/12/2024",
-    startPct: 0,
-    widthPct: 75,
-    periodLabel: "2019 – 2024",
-    frequency: "Journalière",
-    status: "Inutilisable",
-    statusText: "Catalogue de paramètres, pas une série continue",
+    start: "01/01/2025",
+    end: "22/11/2026",
+    startPct: 75,
+    widthPct: 24,
+    periodLabel: "01/01/2025 – 22/11/2026",
+    frequency: "Horaire (16 584 h)",
+    status: "Mesuré",
+    statusText: "Série horaire complète téléchargée (T2M, RH2M, WS10M, WD10M, pluie)",
   },
   {
     source: "Capteur OpenAQ Limamoulaye (Mously)",
@@ -320,13 +320,13 @@ export interface SourceState {
 
 export const SOURCES_STATE_TABLE: SourceState[] = [
   {
-    source: "Données météo NASA POWER",
+    source: "Données météo NASA POWER (2025–2026)",
     responsible: "El Hadji Ibrahima Diop Sow",
-    coverage: "2019 – 2024",
-    timeStep: "Journalier",
-    status: "Inutilisable",
-    statusType: "Inutilisable",
-    comment: "Inutilisable : catalogue de paramètres de 21 lignes, pas une série temporelle continue.",
+    coverage: "01/01/2025 – 22/11/2026",
+    timeStep: "Horaire (UTC)",
+    status: "Reçu",
+    statusType: "Mesuré",
+    comment: "Reçu (25/11/2026) : 16 584 heures valides téléchargées (T2M, RH2M, WS10M, WD10M, PRECTOTCORR). Chevauchement complet avec OpenAQ !",
   },
   {
     source: "Rapport PM2.5 & Harmattan",

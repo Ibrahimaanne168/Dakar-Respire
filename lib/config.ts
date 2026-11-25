@@ -221,9 +221,9 @@ export const TEAM_MEMBERS = [
   },
   {
     name: "El Hadji Ibrahima Diop Sow",
-    role: "Données météorologiques NASA POWER",
-    status: "Catalogue reçu (série horaire avec direction du vent en attente)",
-    fileTarget: "data/raw/meteo_nasa_power_hourly.csv",
+    role: "Données météorologiques NASA POWER (T2M, RH2M, WS10M, WD10M, PRECTOTCORR)",
+    status: "Reçu (16 584 heures valides 2025–2026)",
+    fileTarget: "data/raw/meteo_dakar_2025_2026.csv",
   },
   {
     name: "Papa Ibrahima Samb",
