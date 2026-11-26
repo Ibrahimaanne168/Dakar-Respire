@@ -35,10 +35,10 @@ export default function DataSection() {
           <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" />
           <div className="space-y-1">
             <strong className="block font-medium">
-              Synchronisation complète : Météo NASA POWER (16 584 h) + Capteurs sol OpenAQ + Sentinel-5P
+              Synchronisation complète : Météo, capteurs au sol et satellite
             </strong>
             <p className="text-[11px] leading-relaxed text-[#24613B]/90">
-              Les 16 584 heures météo d'El Hadji (01/01/2025 – 22/11/2026) et les 17 897 mesures au sol de Mously Sow couvrent la même période. L'ensemble est unifié dans le jeu de données propre consolidé avec les observations satellitaires de Lamine Cissé.
+              Toutes nos observations couvrent la période continue 2025–2026. La météo, les capteurs dans les quartiers et les observations spatiales sont synchronisés dans la même base de données consolidée.
             </p>
           </div>
         </div>
@@ -88,24 +88,24 @@ export default function DataSection() {
         </div>
 
         <p className="text-xs text-ink-muted">
-          Accédez directement aux travaux scientifiques originaux réalisés par les membres de l'équipe.
+          Consultez les études scientifiques et les observations par satellite qui alimentent le modèle de prévision.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-          {/* Carte Sayon Sidibé */}
+          {/* Carte Étude scientifique */}
           <div className="p-3.5 bg-[#EAF3ED]/60 border border-[#3F7D58]/40 rounded-[14px] space-y-2.5 flex flex-col justify-between">
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <span className="font-medium text-xs text-ink flex items-center gap-1.5">
                   <BookOpen className="w-3.5 h-3.5 text-[#3F7D58]" />
-                  Étude scientifique de Sayon Sidibé
+                  Étude scientifique de référence
                 </span>
                 <span className="text-[10px] bg-[#3F7D58] text-white px-1.5 py-0.2 rounded-full font-medium">
-                  4 parties
+                  4 volets
                 </span>
               </div>
               <p className="text-[11px] text-ink-muted leading-relaxed">
-                Étude des particules fines PM2.5 au Sahel, couplage AOD/Lidar CALIOP, micro-capteurs et grille réglementaire CGQA/ASN.
+                Comprendre la dynamique des particules fines au Sahel, les seuils d'alerte officiels et la complémentarité des capteurs au sol.
               </p>
             </div>
             <button
@@ -113,24 +113,24 @@ export default function DataSection() {
               className="touch-target w-full py-2 px-3 bg-[#3F7D58] text-white rounded-[10px] font-medium text-xs flex items-center justify-center gap-1.5 shadow-xs hover:bg-[#2E5E41] active:scale-[0.99] transition-all"
             >
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Consulter l'étude de Sayon</span>
+              <span>Consulter l'étude scientifique</span>
             </button>
           </div>
 
-          {/* Carte Lamine Cissé */}
+          {/* Carte Imagerie satellite */}
           <div className="p-3.5 bg-[#EBF2F7]/70 border border-[#2A6F97]/40 rounded-[14px] space-y-2.5 flex flex-col justify-between">
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <span className="font-medium text-xs text-ink flex items-center gap-1.5">
                   <Globe className="w-3.5 h-3.5 text-[#2A6F97]" />
-                  Observations Sentinel-5P de Lamine Cissé
+                  Observations spatiales par satellite
                 </span>
                 <span className="text-[10px] bg-[#2A6F97] text-white px-1.5 py-0.2 rounded-full font-medium">
-                  TROPOMI
+                  Vue satellite
                 </span>
               </div>
               <p className="text-[11px] text-ink-muted leading-relaxed">
-                Imagerie haute résolution Sentinel-5P NO2 troposphérique et animation timelapse de l'indice d'aérosol AER_AI (front saharien).
+                Cartographie du dioxyde d'azote émis par la circulation et animation de la progression des masses d'air sahariennes.
               </p>
             </div>
             <button
@@ -138,19 +138,19 @@ export default function DataSection() {
               className="touch-target w-full py-2 px-3 bg-[#2A6F97] text-white rounded-[10px] font-medium text-xs flex items-center justify-center gap-1.5 shadow-xs hover:bg-[#1E5270] active:scale-[0.99] transition-all"
             >
               <Globe className="w-3.5 h-3.5" />
-              <span>Voir la Carte NO2 & le Timelapse</span>
+              <span>Voir la carte et l'animation</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* ── 3. Jeu de données consolidé unifié (Papa Samb & El Hadji) ── */}
+      {/* ── 3. Jeu de données consolidé unifié ── */}
       <div className="dash-card space-y-3 p-4 sm:p-6">
         <div className="flex items-center justify-between pb-2 border-b border-sand-line/60">
           <div className="flex items-center gap-2">
             <Database className="w-4 h-4 text-terracotta" />
             <h3 className="font-serif text-sm font-normal text-ink">
-              Jeu de données consolidé propre (Papa Samb)
+              Base de données unifiée et nettoyée
             </h3>
           </div>
           <StatusBadge status="Mesuré" size="sm" />
@@ -196,24 +196,24 @@ export default function DataSection() {
         </div>
       </div>
 
-      {/* ── BottomSheet Recherche Scientifique Complémentaire de Sayon Sidibé ── */}
+      {/* ── BottomSheet Recherche Scientifique ── */}
       <BottomSheet
         isOpen={sayonSheetOpen}
         onClose={() => setSayonSheetOpen(false)}
-        title="Recherche scientifique — Sayon Sidibé"
+        title="Recherche scientifique & Références"
       >
         <div className="space-y-4 text-xs text-ink leading-relaxed pb-4">
           <div className="p-2.5 bg-[#EAF3ED] border border-[#3F7D58]/30 rounded-[10px] space-y-1">
             <div className="font-medium text-[#24613B] flex items-center justify-between">
-              <span>Document officiel de l'équipe</span>
+              <span>Rapport d'analyse documentaire</span>
               <span className="text-[10px]">{SAYON_RESEARCH_CONTENT.date}</span>
             </div>
             <p className="text-[11px] text-ink-muted">
-              Source : <code className="font-mono text-ink">{SAYON_RESEARCH_CONTENT.document}</code>
+              Source d'étude : Particules fines, capteurs d'air et seuils sanitaires
             </p>
           </div>
 
-          {/* 4 Parties de Sayon */}
+          {/* 4 Parties */}
           {SAYON_RESEARCH_CONTENT.parts.map((part) => (
             <div key={part.id} className="p-3 bg-sand-surface rounded-[12px] border border-sand-line/70 space-y-2">
               <div className="flex items-center gap-2">
@@ -296,11 +296,11 @@ export default function DataSection() {
         </div>
       </BottomSheet>
 
-      {/* ── BottomSheet Données Satellitaires Lamine Cissé ── */}
+      {/* ── BottomSheet Données Satellitaires ── */}
       <BottomSheet
         isOpen={lamineSheetOpen}
         onClose={() => setLamineSheetOpen(false)}
-        title="Données Satellitaires Sentinel-5P — Lamine Cissé"
+        title="Observations et imagerie par satellite"
       >
         <div className="space-y-4 text-xs pb-4">
           <div className="p-3 bg-[#EBF2F7] border border-[#2A6F97]/30 rounded-[12px] space-y-1">
@@ -311,7 +311,7 @@ export default function DataSection() {
               <StatusBadge status="Mesuré" size="sm" />
             </div>
             <p className="text-[11px] text-ink-muted leading-relaxed">
-              Acquisition Copernicus Data Space Ecosystem (CDSE) / Spectromètre TROPOMI en orbite héliosynchrone. Analyse combinée du panache de dioxyde d'azote urbain et du flux d'aérosols sahariens.
+              Imagerie spatiale au-dessus de la presqu'île du Cap-Vert. Analyse croisée de la pollution urbaine au sol et des grandes nappes de poussières désertiques.
             </p>
           </div>
 
@@ -319,10 +319,10 @@ export default function DataSection() {
           <div className="p-3 bg-white border border-sand-line rounded-[12px] space-y-2.5">
             <div className="flex items-center justify-between">
               <h4 className="font-serif font-medium text-ink text-sm">
-                1. Carte Sentinel-5P NO2 (Dioxyde d'azote)
+                1. Carte satellite du dioxyde d'azote (trafic & combustion)
               </h4>
               <span className="text-[10px] bg-sand-surface px-2 py-0.5 rounded-full text-ink-subtle">
-                25/11/2026
+                Novembre 2026
               </span>
             </div>
             <p className="text-[11px] text-ink-muted leading-relaxed">
@@ -338,8 +338,8 @@ export default function DataSection() {
                 loading="lazy"
               />
               <div className="p-2 bg-sand-surface/90 border-t border-sand-line flex items-center justify-between text-[10px] text-ink-subtle">
-                <span>Résolution native : {LAMINE_SATELLITE_CONTENT.sections[0].originalResolution}</span>
-                <span className="font-medium text-[#2A6F97]">TROPOMI S5P</span>
+                <span>Résolution haute précision</span>
+                <span className="font-medium text-[#2A6F97]">Imagerie spatiale</span>
               </div>
             </div>
 
@@ -356,10 +356,10 @@ export default function DataSection() {
           <div className="p-3 bg-white border border-sand-line rounded-[12px] space-y-2.5">
             <div className="flex items-center justify-between">
               <h4 className="font-serif font-medium text-ink text-sm">
-                2. Timelapse Dynamique AER_AI (Indice d'aérosols UV)
+                2. Animation accélérée des nuages de poussières sahariennes
               </h4>
               <span className="text-[10px] bg-sand-surface px-2 py-0.5 rounded-full text-ink-subtle">
-                23–25/11/2026
+                Masses d'air récentes
               </span>
             </div>
             <p className="text-[11px] text-ink-muted leading-relaxed">

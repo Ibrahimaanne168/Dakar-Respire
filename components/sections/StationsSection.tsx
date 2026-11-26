@@ -28,7 +28,7 @@ export default function StationsSection() {
             Stations de mesure dans la région de Dakar
           </h2>
           <p className="text-xs text-ink-muted">
-            3 stations in situ mesurées et validées par Mously Sow (17 897 heures nettoyées)
+            Relevés en continu dans 3 quartiers témoins de la métropole
           </p>
         </div>
 
@@ -73,7 +73,7 @@ export default function StationsSection() {
 
         <DataMetadata
           unit="µg/m³"
-          source="Mously Sow / OpenAQ"
+          source="Réseau de capteurs d'air à Dakar"
           period="Archives sol 2025–2026"
           status="Mesuré"
         />
@@ -99,7 +99,7 @@ export default function StationsSection() {
             </div>
 
             <div className="p-3 bg-white rounded-[12px] border border-sand-line text-xs space-y-1">
-              <span className="font-medium text-ink block">Comportement documenté par Mously :</span>
+              <span className="font-medium text-ink block">Ce que révèle le quartier :</span>
               <p className="text-ink-muted leading-relaxed">{activeStation.note}</p>
             </div>
           </div>
@@ -194,22 +194,22 @@ export default function StationsSection() {
           </div>
 
           <p className="text-[11px] text-ink-subtle leading-relaxed">
-            <strong>Conclusion scientifique (Mously Sow) :</strong> L'analyse des 17 897 mesures horaires confirme le double cycle diurne à Dakar : un premier pic vers 8h–9h (trafic matinal et reprise d'activité) et un second pic vers 20h–21h (trafic du soir et abaissement de la couche limite atmosphérique), avec un minimum nocturne régulier entre 3h et 5h du matin.
+            <strong>Ce que révèlent les mesures :</strong> L'analyse de 17 897 heures montre deux pics quotidiens réguliers : le matin entre 8h et 9h (départs et circulation dense) et le soir entre 20h et 21h (retours et stagnation de l'air), avec une accalmie nocturne entre 3h et 5h du matin.
           </p>
         </div>
       </div>
 
-      {/* ── 4. Cadre réglementaire & Calcul de l'IQA (Recherches Sayon Sidibé) ── */}
+      {/* ── 4. Cadre réglementaire & Calcul de l'IQA ── */}
       <div className="dash-card space-y-3 p-4 sm:p-6">
         <div className="flex items-center justify-between pb-2 border-b border-sand-line/60">
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4 text-terracotta" />
             <h3 className="font-serif text-sm font-normal text-ink">
-              Cadre réglementaire sénégalais (NS 05-062) & Indice IQA
+              Comprendre l'Indice de la Qualité de l'Air (IQA)
             </h3>
           </div>
           <span className="text-[10px] bg-[#EAF3ED] text-[#24613B] font-medium px-2 py-0.5 rounded-full border border-[#3F7D58]/30">
-            Sayon Sidibé
+            Norme officielle
           </span>
         </div>
 
@@ -253,7 +253,7 @@ export default function StationsSection() {
         </div>
 
         <p className="text-[11px] text-ink-subtle leading-relaxed pt-1">
-          <strong>Distinction méthodologique (Sayon Sidibé) :</strong> La recommandation OMS (15 µg/m³ sur 24h) sert de repère sanitaire international, tandis que l'indice du CGQA et la norme NS 05-062 constituent le cadre réglementaire d'alerte des populations à Dakar.
+          <strong>Repère santé :</strong> La recommandation de l'OMS (15 µg/m³ sur 24h) sert de repère de protection de la santé, tandis que la grille d'indice de 0 à 500 indique le niveau d'alerte immédiat pour la population.
         </p>
       </div>
     </section>

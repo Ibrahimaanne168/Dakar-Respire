@@ -184,19 +184,19 @@ export default function ModelSection() {
         </div>
 
         <p className="text-[11px] text-ink-subtle pt-1">
-          <strong>Validation théorique (Sayon Sidibé / Léon et al. 2020) :</strong> L'AOD satellitaire totale n'explique que 15 % de la variance au sol (R² = 0,15) au Sahel ; il faut impérativement intégrer la distribution verticale (CALIOP/Lidar) pour monter à R² = 0,75. À 24 h, les lags du capteur au sol dominent l'information.
+          <strong>Pourquoi le satellite seul ne suffit pas :</strong> Un satellite observe l'atmosphère depuis l'espace (souvent des poussières qui survolent la ville à haute altitude sans toucher le sol). C'est pourquoi les capteurs dans les rues sont indispensables pour connaître l'air réellement respiré.
         </p>
 
-        {/* Note observationnelle Sentinel-5P Lamine Cissé */}
+        {/* Note observationnelle Sentinel-5P */}
         <div className="p-2.5 bg-[#EBF2F7] border border-[#2A6F97]/30 rounded-[10px] space-y-1 text-[11px]">
           <div className="flex items-center justify-between text-[#1E5270] font-medium">
-            <span>Observation Sentinel-5P TROPOMI (Lamine Cissé, 25/11/2026)</span>
+            <span>L'apport des observations spatiales</span>
             <span className="text-[10px] bg-white px-1.5 py-0.2 rounded border border-[#2A6F97]/30 font-semibold">
-              Données reçues
+              Données réelles
             </span>
           </div>
           <p className="text-ink-muted">
-            L'imagerie TROPOMI (NO2 & AER_AI) confirme l'apport décisif du satellite pour repérer l'arrivée des tempêtes de poussière sahariennes (timelapse en mer et sur la côte), tout en illustrant la nécessité de coupler l'information avec les séries horaires au sol (Mously Sow) pour capter les deux pics journaliers de pollution urbaine.
+            Les images satellites permettent de voir arriver les nuages de poussière du Sahara deux jours à l'avance, tandis que les capteurs au sol mesurent avec exactitude les heures de pointe du trafic urbain dans nos quartiers.
           </p>
         </div>
       </div>
@@ -211,7 +211,7 @@ export default function ModelSection() {
           >
             <span className="flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-terracotta" />
-              <span>Ce que le modèle ne sait pas faire (5 limites documentées par Sayon)</span>
+              <span>Les 5 défis majeurs pour anticiper la pollution à Dakar</span>
             </span>
             {limitsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
@@ -219,24 +219,24 @@ export default function ModelSection() {
           {limitsOpen && (
             <div className="space-y-2 mt-3 pt-2 text-xs text-ink-muted">
               <div className="p-2.5 bg-sand-surface rounded-[10px] space-y-0.5">
-                <strong className="text-ink block">1. AOD Colonne totale ≠ Sol respiré :</strong>
-                <span>Le satellite intègre toute l'atmosphère (poussières sahariennes transitant à 3 000 m). Sans lidar vertical (CALIOP), l'AOD ne reflète pas l'air au sol (Léon et al. 2020).</span>
+                <strong className="text-ink block">1. L'altitude du sable :</strong>
+                <span>Le satellite voit la poussière qui vole à 3 000 m d'altitude. Sans capteurs au sol, impossible de savoir quelle part retombe au niveau des poumons.</span>
               </div>
               <div className="p-2.5 bg-sand-surface rounded-[10px] space-y-0.5">
-                <strong className="text-ink block">2. Biais d'humidité (&gt; 80 %) et couverture nuageuse :</strong>
-                <span>Le gonflement hygroscopique fausse les micro-capteurs optiques côtiers, et les nuages bloquent les capteurs optiques satellitaires en saison des pluies (hivernage).</span>
+                <strong className="text-ink block">2. L'humidité de l'océan :</strong>
+                <span>L'air marin humide fait gonfler les embruns, et les nuages d'hivernage peuvent temporairement masquer la vue des satellites.</span>
               </div>
               <div className="p-2.5 bg-sand-surface rounded-[10px] space-y-0.5">
-                <strong className="text-ink block">3. Résolution spatiale (pixel grossier) :</strong>
-                <span>Un pixel satellite (7×3,5 km ou 10×10 km) moyenne toute une commune et ne distingue pas les axes routiers saturés, les zones industrielles et le littoral.</span>
+                <strong className="text-ink block">3. La diversité des quartiers :</strong>
+                <span>Un pixel satellite couvre plusieurs kilomètres et ne distingue pas une rue calme bordée d'arbres d'un axe routier congestionné.</span>
               </div>
               <div className="p-2.5 bg-sand-surface rounded-[10px] space-y-0.5">
-                <strong className="text-ink block">4. Résolution temporelle (passage 1x/jour) :</strong>
-                <span>Les satellites en orbite héliosynchrone ratent le cycle diurne (pic du matin à 8h et du soir à 20h). Seul un réseau sol continu capture ces variations.</span>
+                <strong className="text-ink block">4. Le rythme des passages :</strong>
+                <span>Les satellites ne survolent généralement la zone qu'une fois par jour, ratant le pic de circulation du matin et celui du soir.</span>
               </div>
               <div className="p-2.5 bg-sand-surface rounded-[10px] space-y-0.5">
-                <strong className="text-ink block">5. Tempêtes d'Harmattan et lissage extrême :</strong>
-                <span>Les bouffées aiguës (&gt; 150 µg/m³) sont statistiquement atténuées par les fonctions de perte quadratique (RMSE/MSE) des algorithmes d'apprentissage.</span>
+                <strong className="text-ink block">5. La soudaineté des tempêtes :</strong>
+                <span>Les tempêtes d'Harmattan peuvent envahir la presqu'île en quelques heures seulement, nécessitant des alertes réactives.</span>
               </div>
             </div>
           )}
@@ -250,7 +250,7 @@ export default function ModelSection() {
           >
             <span className="flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-terracotta" />
-              <span>Références scientifiques complètes (Sayon Sidibé & Alioune B. Sarr)</span>
+              <span>Études et publications scientifiques de référence</span>
             </span>
             {refsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>

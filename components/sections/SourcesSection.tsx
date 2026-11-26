@@ -28,8 +28,14 @@ export default function SourcesSection() {
             D'où proviennent les particules fines ?
           </h2>
           <p className="text-xs text-ink-muted">
-            Campagne de saison sèche 2009 (synthèse Alioune Badara Sarr)
+            Origine des particules respirées dans l'agglomération dakaroise
           </p>
+        </div>
+
+        {/* Encadré explicatif en langage simple */}
+        <div className="p-3 bg-sand-surface rounded-[12px] border border-sand-line/70 text-xs text-ink-muted leading-relaxed">
+          <strong className="text-ink font-medium block mb-0.5">En clair :</strong>
+          À Dakar, la pollution a deux coupables principaux : les <strong>gaz d'échappement</strong> de la circulation urbaine au quotidien, et les <strong>nuages de poussière du désert</strong> apportés par le vent en saison sèche.
         </div>
 
         {/* Donut centré */}
@@ -105,9 +111,9 @@ export default function SourcesSection() {
         </div>
 
         <DataMetadata
-          unit="%"
-          source="Alioune B. Sarr / Campagne 2009"
-          period="Ordres de grandeur"
+          unit="Part en %"
+          source="Inventaire des émissions de la métropole"
+          period="Moyenne annuelle"
           status="Mesuré"
         />
       </div>
