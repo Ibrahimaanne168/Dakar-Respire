@@ -68,8 +68,8 @@ export default function DataSection() {
         </div>
 
         <DataMetadata
-          unit="Heures & pixels"
-          source="NASA POWER, OpenAQ & Sentinel-5P"
+          unit="Heures d'observation"
+          source="Météo, capteurs urbains & satellite"
           period="2025 – 2026"
           status="Mesuré"
         />
@@ -130,7 +130,7 @@ export default function DataSection() {
                 </span>
               </div>
               <p className="text-[11px] text-ink-muted leading-relaxed">
-                Cartographie du dioxyde d'azote émis par la circulation et animation de la progression des masses d'air sahariennes.
+                Cartographie par satellite du dioxyde d'azote au-dessus de Dakar : visualisation des panaches de gaz d'échappement urbains.
               </p>
             </div>
             <button
@@ -138,7 +138,7 @@ export default function DataSection() {
               className="touch-target w-full py-2 px-3 bg-[#2A6F97] text-white rounded-[10px] font-medium text-xs flex items-center justify-center gap-1.5 shadow-xs hover:bg-[#1E5270] active:scale-[0.99] transition-all"
             >
               <Globe className="w-3.5 h-3.5" />
-              <span>Voir la carte et l'animation</span>
+              <span>Consulter la carte satellite</span>
             </button>
           </div>
         </div>
@@ -352,55 +352,13 @@ export default function DataSection() {
             </ul>
           </div>
 
-          {/* Section 2 : Vidéo Timelapse AER_AI */}
-          <div className="p-3 bg-white border border-sand-line rounded-[12px] space-y-2.5">
-            <div className="flex items-center justify-between">
-              <h4 className="font-serif font-medium text-ink text-sm">
-                2. Animation accélérée des nuages de poussières sahariennes
-              </h4>
-              <span className="text-[10px] bg-sand-surface px-2 py-0.5 rounded-full text-ink-subtle">
-                Masses d'air récentes
-              </span>
-            </div>
-            <p className="text-[11px] text-ink-muted leading-relaxed">
-              {LAMINE_SATELLITE_CONTENT.sections[1].lead}
-            </p>
-
-            {/* Lecteur vidéo */}
-            <div className="rounded-[8px] overflow-hidden border border-sand-line bg-black">
-              <video
-                src={LAMINE_SATELLITE_CONTENT.sections[1].video}
-                controls
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-auto max-h-64 object-contain mx-auto"
-              >
-                Votre navigateur ne prend pas en charge la balise vidéo.
-              </video>
-              <div className="p-2 bg-sand-surface text-[10px] text-ink-subtle flex items-center justify-between">
-                <span>Animation du transport d'aérosols vers la côte dakaroise</span>
-                <span className="text-terracotta font-medium">Harmattan Saharien</span>
-              </div>
-            </div>
-
-            <ul className="space-y-1 pt-1">
-              {LAMINE_SATELLITE_CONTENT.sections[1].keyPoints.map((pt, idx) => (
-                <li key={idx} className="p-2 bg-sand-surface rounded-[8px] text-[11px] text-ink-muted">
-                  {pt}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Section 3 : Transparence & Audit technique */}
+          {/* Section 2 : Complémentarité Sol & Espace */}
           <div className="p-3 bg-[#FAF8F5] border border-sand-line rounded-[12px] space-y-2">
             <h4 className="font-serif font-medium text-ink text-sm">
-              3. Transparence Scientifique & Traitement des Fichiers NetCDF
+              2. Pourquoi combiner les capteurs de rue et le satellite ?
             </h4>
             <div className="space-y-1.5 pt-1">
-              {LAMINE_SATELLITE_CONTENT.sections[2].auditPoints?.map((ap, idx) => (
+              {LAMINE_SATELLITE_CONTENT.sections[1].auditPoints?.map((ap, idx) => (
                 <div key={idx} className="p-2.5 bg-white rounded-[8px] border border-sand-line/60 space-y-0.5">
                   <div className="flex items-center justify-between text-[11px]">
                     <strong className="text-ink">{ap.label}</strong>

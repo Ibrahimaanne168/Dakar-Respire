@@ -32,7 +32,24 @@ export default function StationsSection() {
           </p>
         </div>
 
-        {/* Liste claire de cartes pour chaque station de Dakar (Almadies, Grand Dakar, Tiaroye, Plateau, etc.) */}
+        {/* Encadré explicatif en langage simple */}
+        <div className="p-3 bg-sand-surface rounded-[12px] border border-sand-line/70 text-xs text-ink-muted leading-relaxed space-y-1">
+          <div className="flex items-center gap-1.5 text-ink font-medium">
+            <span>💡</span>
+            <span>Pourquoi observer ces 3 quartiers ?</span>
+          </div>
+          <p>
+            • <strong>ESMT (Fann) :</strong> En bord d'océan, l'air marin tempère et disperse plus vite les polluants.
+          </p>
+          <p>
+            • <strong>Limamoulaye (Guédiawaye) :</strong> En banlieue densément peuplée, directement exposé aux vents de poussière venant de l'est.
+          </p>
+          <p>
+            • <strong>Tivaouane :</strong> Carrefour urbain très passant, marqué par les fumées d'échappement des cars et taxis.
+          </p>
+        </div>
+
+        {/* Liste claire de cartes pour chaque station de Dakar */}
         <div className="space-y-2.5">
           {GROUND_STATIONS.map((st) => {
             const alert = st.latestValue ? getAlertLevel(st.latestValue) : null;

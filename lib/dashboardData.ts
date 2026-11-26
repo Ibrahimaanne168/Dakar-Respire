@@ -512,21 +512,8 @@ export const LAMINE_SATELLITE_CONTENT = {
       ],
     },
     {
-      id: "aer_ai_timelapse",
-      title: "2. Animation Vidéo : Arrivée des nuages de poussière du Sahara",
-      lead: "Vidéo satellite montrant le déplacement des masses de poussière désertique poussées par le vent d'est vers l'océan et la côte dakaroise.",
-      video: "/satellite/sentinel5p_aer_ai_timelapse.mp4",
-      sensor: "Détecteur d'aérosols UV Sentinel-5P",
-      period: "Séquence de novembre 2026",
-      keyPoints: [
-        "Détection à grande échelle : Le satellite suit le sable même au-dessus des nuages et de l'océan Atlantique.",
-        "Le couloir de l'Harmattan : L'animation montre la vague de poussière qui traverse le Sahel d'est en ouest pour atteindre la presqu'île.",
-        "Lien direct avec vos poumons : Lorsque cette vague jaune arrive sur Dakar, les capteurs au sol enregistrent une hausse immédiate des particules fines.",
-      ],
-    },
-    {
       id: "transparency_audit",
-      title: "3. Pourquoi combiner le sol et l'espace ?",
+      title: "2. Pourquoi combiner le sol et l'espace ?",
       lead: "La complémentarité essentielle entre les capteurs dans les rues et les satellites en orbite.",
       auditPoints: [
         {

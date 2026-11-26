@@ -100,31 +100,24 @@ export default function ForecastSection({
             <StatusBadge status={isSynthetic ? "Simulé" : "Modèle"} size="sm" />
           </div>
           <h2 className="font-serif text-xl sm:text-2xl text-ink font-normal">
-            Évolution horaire des PM2.5
+            Évolution horaire de la qualité de l'air
           </h2>
           <p className="text-xs text-ink-muted">
-            Glissez le doigt sur le graphique pour inspecter chaque heure
+            Prévision heure par heure sur les prochaines 24 heures (toucher une barre pour afficher le détail)
           </p>
 
-          {/* Sélecteur de modèle en boutons tactiles (>= 44px) */}
-          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 pt-2">
-            {modelsList.map((m) => {
-              const active = selectedModel === m.id;
-              return (
-                <button
-                  key={m.id}
-                  onClick={() => setSelectedModel(m.id)}
-                  className={`touch-target h-10 px-3 text-xs rounded-pill transition-all font-medium flex items-center justify-center gap-1.5 ${
-                    active
-                      ? "bg-ink text-white shadow-xs"
-                      : "bg-sand-surface text-ink-muted border border-sand-line active:bg-sand-line"
-                  }`}
-                >
-                  {active && <Check className="w-3.5 h-3.5 text-terracotta" />}
-                  <span>{m.name}</span>
-                </button>
-              );
-            })}
+          {/* Encadré explicatif en langage simple */}
+          <div className="p-3 bg-sand-surface rounded-[12px] border border-sand-line/70 text-xs text-ink-muted leading-relaxed space-y-1 mt-1">
+            <div className="flex items-center gap-1.5 text-ink font-medium">
+              <span>💡</span>
+              <span>À retenir pour votre journée :</span>
+            </div>
+            <p>
+              • <strong>Les pics d'air pollué :</strong> Vers <strong>8h</strong> et <strong>20h</strong>, les trajets domicile-travail et la circulation dense créent une forte concentration de poussières.
+            </p>
+            <p>
+              • <strong>Le meilleur moment :</strong> En fin de nuit entre <strong>3h et 6h du matin</strong>, la brise marine disperse les particules. C'est le moment idéal pour aérer.
+            </p>
           </div>
         </div>
 

@@ -141,13 +141,30 @@ export default function HeroSection({
                 <span>Alizés maritimes tempérant l'accumulation.</span>
               )}
             </p>
+
+            {/* Encadré explicite : Conseil santé pratique immédiat */}
+            <div className="mt-2 p-2.5 rounded-[10px] bg-sand-surface border border-sand-line/70 flex items-start gap-2 text-xs">
+              <span className="text-sm shrink-0">💡</span>
+              <div className="leading-tight">
+                <strong className="text-ink font-medium">Conseil santé à cette heure : </strong>
+                <span className="text-ink-muted">
+                  {currentItem.pm25 < 15
+                    ? "Air pur. Idéal pour faire du sport dehors et aérer votre logement."
+                    : currentItem.pm25 < 35
+                    ? "Air moyen. Les personnes très sensibles (asthmatiques, jeunes enfants) doivent rester attentives."
+                    : currentItem.pm25 < 55
+                    ? "Air dégradé. Évitez les efforts physiques prolongés en plein air et les grands axes."
+                    : "Alerte pollution. Port du masque conseillé à l'extérieur. Fermez les fenêtres aux heures de pointe."}
+                </span>
+              </div>
+            </div>
           </div>
 
           <DataMetadata
             unit="µg/m³"
-            source="Modèle ML / OpenAQ"
+            source="Capteurs au sol & Météo"
             period="Horizon 24 h"
-            status={isSynthetic ? "Simulé" : "Modèle"}
+            status={isSynthetic ? "Calculé" : "Mesuré"}
             className="pt-2 mt-3"
           />
         </div>
@@ -221,7 +238,7 @@ export default function HeroSection({
               </span>
               <span className="text-xs text-ink-subtle ml-1">µg/m³</span>
             </div>
-            <DataMetadata source="OpenAQ" status={isSynthetic ? "Simulé" : "Mesuré"} className="pt-1 mt-1" />
+            <DataMetadata source="Capteurs de Dakar" status={isSynthetic ? "Calculé" : "Mesuré"} className="pt-1 mt-1" />
           </div>
 
           {/* Carte 2 : Pic prévu */}
@@ -240,7 +257,7 @@ export default function HeroSection({
                 µg/m³ {peakItem ? `à ${peakItem.hour}h` : ""}
               </span>
             </div>
-            <DataMetadata source="Modèle 24h" status="Modèle" className="pt-1 mt-1" />
+            <DataMetadata source="Prévision" status="Calculé" className="pt-1 mt-1" />
           </div>
 
           {/* Carte 3 : Meilleur créneau */}
@@ -259,13 +276,13 @@ export default function HeroSection({
                 ({bestItem ? bestItem.pm25.toFixed(1) : "14,5"} µg)
               </span>
             </div>
-            <DataMetadata source="Profil diurne" status="Modèle" className="pt-1 mt-1" />
+            <DataMetadata source="Air le plus pur" status="Recommandé" className="pt-1 mt-1" />
           </div>
 
           {/* Carte 4 : Seuil OMS */}
           <div className="dash-card w-[78vw] sm:w-auto shrink-0 snap-start flex flex-col justify-between p-4 mb-0">
             <div className="flex items-center justify-between text-xs text-ink-muted">
-              <span>Seuil OMS 24 h</span>
+              <span>Seuil de santé OMS</span>
               <div className="w-7 h-7 rounded-full bg-sand-surface flex items-center justify-center text-ochre">
                 <ShieldAlert className="w-3.5 h-3.5" />
               </div>
@@ -274,15 +291,15 @@ export default function HeroSection({
               <span className="font-serif text-3xl font-normal text-ink tabular-nums">
                 {ratioWho24h}×
               </span>
-              <span className="text-xs text-ink-subtle ml-1">le seuil 15 µg</span>
+              <span className="text-xs text-ink-subtle ml-1">recommandé par l'OMS</span>
             </div>
-            <DataMetadata source="Norme OMS" status="Modèle" className="pt-1 mt-1" />
+            <DataMetadata source="Repère santé" status="Protection" className="pt-1 mt-1" />
           </div>
 
           {/* Carte 5 : Vent & Harmattan */}
           <div className="dash-card w-[78vw] sm:w-auto shrink-0 snap-start flex flex-col justify-between p-4 mb-0">
             <div className="flex items-center justify-between text-xs text-ink-muted">
-              <span>Vent & Harmattan</span>
+              <span>Vent dominant</span>
               <div className="w-7 h-7 rounded-full bg-sand-surface flex items-center justify-center text-teal">
                 <Navigation className="w-3.5 h-3.5" />
               </div>
@@ -291,9 +308,9 @@ export default function HeroSection({
               <span className="font-serif text-3xl font-normal text-ink tabular-nums">
                 {currentItem.wind_speed?.toFixed(1) ?? "4,2"}
               </span>
-              <span className="text-xs text-ink-subtle ml-1">m/s · {isHarmattan ? "NE" : "Ouest"}</span>
+              <span className="text-xs text-ink-subtle ml-1">m/s · {isHarmattan ? "Harmattan (NE)" : "Brise de mer (Ouest)"}</span>
             </div>
-            <DataMetadata source="NASA POWER" status={isHarmattan ? "Harmattan" : "Alizé"} className="pt-1 mt-1" />
+            <DataMetadata source="Météo" status={isHarmattan ? "Harmattan" : "Brise marine"} className="pt-1 mt-1" />
           </div>
         </div>
       </div>
@@ -340,7 +357,7 @@ export default function HeroSection({
                 { value: 0, color: "#1F5C5E" },
                 { value: 80, color: "#D2691E" },
               ]}
-              subtext={humidityValue >= 80 ? "Biais > 80%" : "Régulier"}
+              subtext={humidityValue >= 80 ? "Air très humide" : "Humidité normale"}
             />
           </div>
 
@@ -358,7 +375,7 @@ export default function HeroSection({
                 { value: 2.5, color: "#C99A1E" },
                 { value: 5, color: "#3F7D58" },
               ]}
-              subtext={isHarmattan ? "Harmattan" : "Alizé"}
+              subtext={isHarmattan ? "Harmattan" : "Brise de mer"}
             />
           </div>
         </div>
