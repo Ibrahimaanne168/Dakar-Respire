@@ -1,6 +1,5 @@
 # ==============================================================================
 # PROJET DAKAR RESPIRE - INGÉNIERIE DES VARIABLES (FEATURE ENGINEERING)
-# Auteur : Ibrahima Anne (Data / ML Lead)
 # ==============================================================================
 import numpy as np
 import pandas as pd

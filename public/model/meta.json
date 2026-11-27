@@ -1,6 +1,6 @@
 {
   "project": "Dakar Respire",
-  "author": "Ibrahima Anne (Responsable Modélisation & Interface)",
+  "author": "Plateforme Dakar Respire (Modélisation & Interface)",
   "competition": "Concours Mathématiques et Modélisation",
   "trained_at": "2026-11-23T23:00:00Z",
   "synthetic": true,
@@ -112,11 +112,6 @@
       "role": "Recherche scientifique & Seuils",
       "status": "À venir",
       "deliverable": "Seuils d'alerte et limites d'aérosols (intégration directe dans config)."
-    },
-    "Ibrahima Anne": {
-      "role": "Modèle ML & Site Web Next.js",
-      "status": "Opérationnel",
-      "deliverable": "Site Next.js avec 3D Three.js, pipeline d'apprentissage et moteur d'inférence web."
     }
   }
 }

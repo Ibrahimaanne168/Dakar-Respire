@@ -2,8 +2,7 @@
 
 **Concours :** Mathématiques et Modélisation  
 **Projet :** Prévision de la pollution aux particules fines (PM2.5) à Dakar sur un horizon de 24 heures  
-**Responsable Modélisation & Interface :** Ibrahima Anne  
-**Équipe :** Alioune Badara Sarr, El Hadji Ibrahima Diop Sow, Lamine Cissé, Mously Sow, Papa Ibrahima Samb, Sayon Sidibé, Ibrahima Anne  
+**Équipe :** Alioune Badara Sarr, El Hadji Ibrahima Diop Sow, Lamine Cissé, Mously Sow, Papa Ibrahima Samb, Sayon Sidibé  
 **Date :** Novembre 2026  
 
 ---

@@ -1,6 +1,5 @@
 # ==============================================================================
 # PROJET DAKAR RESPIRE - GÉNÉRATEUR DE DONNÉES SIMULÉES RÉALISTES
-# Auteur : Ibrahima Anne (Data / ML Lead)
 # Basé sur les connaissances de domaine d'Alioune Badara Sarr et du CGQA
 # ==============================================================================
 """

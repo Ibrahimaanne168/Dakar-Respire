@@ -1,6 +1,5 @@
 # ==============================================================================
 # PROJET DAKAR RESPIRE - SUITE DE MODÈLES PRÉDICTIFS
-# Auteur : Ibrahima Anne (Data / ML Lead)
 # Modèles : Régression Linéaire/Ridge, Random Forest, Gradient Boosting (XGB/LGB/Hist)
 # ==============================================================================
 import numpy as np

@@ -1,6 +1,5 @@
 # ==============================================================================
 # PROJET DAKAR RESPIRE - CONFIGURATION CENTRALE
-# Responsable Modèle & Interface : Ibrahima Anne
 # Concours : Mathématiques et Modélisation
 # ==============================================================================
 """

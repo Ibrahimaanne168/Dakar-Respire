@@ -1,6 +1,5 @@
 # ==============================================================================
 # PROJET DAKAR RESPIRE - INTERFACE STREAMLIT DE PRÉVISION & SURVEILLANCE
-# Responsable Modèle & Interface : Ibrahima Anne
 # Concours : Mathématiques et Modélisation
 # ==============================================================================
 import streamlit as st
@@ -125,7 +124,6 @@ st.sidebar.markdown("""
 - **Mously Sow** : Mesures OpenAQ *(Rapport reçu)*
 - **Papa I. Samb** : Consolidation & Nettoyage *(À venir)*
 - **Sayon Sidibé** : Seuils d'alerte & Limites *(À venir)*
-- **Ibrahima Anne** : Modèle IA & Interface *(En cours)*
 """)
 
 # ------------------------------------------------------------------------------

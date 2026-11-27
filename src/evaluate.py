@@ -1,6 +1,5 @@
 # ==============================================================================
 # PROJET DAKAR RESPIRE - MODULE D'ÉVALUATION SCIENTIFIQUE RIGUREUSE
-# Auteur : Ibrahima Anne (Data / ML Lead)
 # Concours : Mathématiques et Modélisation
 # ==============================================================================
 """

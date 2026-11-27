@@ -1,6 +1,5 @@
 # ==============================================================================
 # PROJET DAKAR RESPIRE - EXPORT DU MODÈLE ET DES RÉSULTATS POUR LE SITE WEB
-# Auteur : Ibrahima Anne (Data / ML Lead)
 # Produit les fichiers dans public/model/ pour Next.js et Vercel
 # ==============================================================================
 import json
@@ -71,7 +70,7 @@ def export_all():
     # 6. EXPORT 1 : meta.json
     meta = {
         "project": "Dakar Respire",
-        "author": "Ibrahima Anne (Lead Modélisation)",
+        "author": "Plateforme Dakar Respire",
         "competition": "Concours Mathématiques et Modélisation",
         "trained_at": datetime.now(timezone.utc).isoformat(),
         "synthetic": bool(is_simulated),
@@ -90,7 +89,6 @@ def export_all():
             "Mously Sow": {"role": "Mesures réelles OpenAQ", "status": "Rapport reçu (Séries complètes attendues)"},
             "Papa Ibrahima Samb": {"role": "Nettoyage & Fichier propre", "status": "À venir (Intégration directe)"},
             "Sayon Sidibé": {"role": "Seuils & Recherches", "status": "À venir (Intégration directe)"},
-            "Ibrahima Anne": {"role": "Modèle ML & Interface Next.js", "status": "Opérationnel"},
         }
     }
     with open(web_model_dir / "meta.json", "w", encoding="utf-8") as f:

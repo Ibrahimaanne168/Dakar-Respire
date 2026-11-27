@@ -1,6 +1,5 @@
 # ==============================================================================
 # PROJET DAKAR RESPIRE - CHARGEUR DE DONNÉES ROBUSTE
-# Auteur : Ibrahima Anne (Data / ML Lead)
 # Destiné à charger directement le fichier propre de Papa Ibrahima Samb
 # ==============================================================================
 import logging

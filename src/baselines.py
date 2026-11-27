@@ -1,6 +1,5 @@
 # ==============================================================================
 # PROJET DAKAR RESPIRE - MODÈLES DE RÉFÉRENCE (BASELINES)
-# Auteur : Ibrahima Anne (Data / ML Lead)
 # Deux références à battre : Persistance temporelle et Prévision CAMS brute
 # ==============================================================================
 import numpy as np

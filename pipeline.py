@@ -1,6 +1,5 @@
 # ==============================================================================
 # PROJET DAKAR RESPIRE - PIPELINE D'ENTRAÎNEMENT ET D'ÉVALUATION (CLI)
-# Auteur : Ibrahima Anne (Data / ML Lead)
 # Concours : Mathématiques et Modélisation
 # ==============================================================================
 """

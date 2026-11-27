@@ -1,7 +1,7 @@
 // ==============================================================================
 // DAKAR RESPIRE - JEUX DE DONNÉES & STRUCTURES DU TABLEAU DE BORD EXPLICITE
 // Conforme aux rapports d'Alioune Badara Sarr, Mously Sow, Lamine Cissé,
-// El Hadji Ibrahima Diop Sow, Papa Ibrahima Samb, Sayon Sidibé & Ibrahima Anne.
+// El Hadji Ibrahima Diop Sow, Papa Ibrahima Samb & Sayon Sidibé.
 // ==============================================================================
 
 export type DataStatus = "Mesuré" | "Modèle" | "Simulé" | "À venir" | "Inutilisable";

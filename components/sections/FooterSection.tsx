@@ -11,7 +11,7 @@ export default function FooterSection() {
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
           <h3 className="font-serif text-lg text-ink font-normal">
-            L'équipe du projet Dakar Respire (7 membres)
+            L'équipe du projet Dakar Respire (6 membres)
           </h3>
           <span className="text-[11px] text-ink-subtle">
             Concours Mathématiques et Modélisation · Attribution officielle des tâches
@@ -62,8 +62,8 @@ export default function FooterSection() {
         </div>
 
         <div className="text-right shrink-0">
-          <span className="font-serif text-xs text-ink block">Ibrahima Anne</span>
-          <span>Responsable Modélisation & Interface Web</span>
+          <span className="font-serif text-xs text-ink block">Plateforme Dakar Respire</span>
+          <span>Modélisation IA & Surveillance citoyenne de l'air</span>
         </div>
       </div>
     </footer>

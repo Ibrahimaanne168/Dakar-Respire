@@ -1,8 +1,7 @@
 # 🌬️ DAKAR RESPIRE — Plateforme de Prévision des PM2.5 à Dakar sur 24h
 
 **Concours :** Mathématiques et Modélisation  
-**Responsable Modélisation & Interface :** Ibrahima Anne  
-**Équipe :** Alioune Badara Sarr, El Hadji Ibrahima Diop Sow, Lamine Cissé, Mously Sow, Papa Ibrahima Samb, Sayon Sidibé, Ibrahima Anne  
+**Équipe :** Alioune Badara Sarr, El Hadji Ibrahima Diop Sow, Lamine Cissé, Mously Sow, Papa Ibrahima Samb, Sayon Sidibé  
 
 ---
 

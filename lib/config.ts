@@ -235,14 +235,8 @@ export const LAMINE_SATELLITE_FINDINGS = {
   },
 };
 
-// Répartition des 7 membres de l'équipe (DOC-20261115-WA0029.pdf)
+// Répartition des membres de l'équipe (DOC-20261115-WA0029.pdf)
 export const TEAM_MEMBERS = [
-  {
-    name: "Ibrahima Anne",
-    role: "Modélisation statistique, apprentissage et interface web",
-    status: "Opérationnel",
-    fileTarget: "public/model/ & app/",
-  },
   {
     name: "Alioune Badara Sarr",
     role: "Étude des PM2.5, poussières sahariennes et régimes de saison",

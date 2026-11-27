@@ -1,7 +1,7 @@
 """
 DAKAR RESPIRE — Pipeline de nettoyage et consolidation des mesures au sol
 Responsable de collecte : Mously Sow
-Traitement & Nettoyage : Ibrahima Anne (Data / ML)
+Traitement & Nettoyage : Équipe Dakar Respire
 
 Sources :
 - donnees/mesures_pm25.xlsx (17 897 mesures horaires : Limamoulaye, Tivaoune, ESMT)
